@@ -22,7 +22,7 @@
     {% for note in garden_section.pages %}
       {% set category = note.extra.category | default(value="generelt") %}
       
-      <a href="{{ note.permalink | safe }}" class="note-card" 
+      <a href="{{ note.path | safe }}" class="note-card" 
          data-title="{{ note.title }}" 
          data-summary="{{ note.description | default(value=note.summary | default(value="")) }}" 
          data-tags="{{ note.taxonomies.tags | default(value=[]) | join(sep=", ") }}"
@@ -83,15 +83,18 @@
     2. Oppdater 'name'-attributten på honeypot-feltet under for best mulig spam-beskyttelse:
        Erstatt 'b_din_u_id_din_list_id' med 'b_' etterfulgt av din u-verdi og id-verdi (f.eks. b_abcdef123_456789).
   -->
-  <form class="newsletter-form" action="https://dentammebever.us10.list-manage.com/subscribe/post?u=din_bruker_id&amp;id=din_liste_id" method="post" target="_blank" novalidate>
+  <form class="newsletter-form"
+        action="https://dentammebever.us10.list-manage.com/subscribe/post?u=3645dc87336497ae12b0a4463&id=6b07e43093"
+        method="post"
+        target="_blank"
+        novalidate>
     <input type="email" class="newsletter-input" name="EMAIL" placeholder="din e-postadresse..." aria-label="E-postadresse" required>
-    
-    <!-- Anti-bot honeypot (skjult for vanlige brukere, lurer roboter til å feile registreringen) -->
+    <!-- Anti-bot honeypot (skjult for vanlige brukere) -->
     <div style="position: absolute; left: -5000px;" aria-hidden="true">
-      <input type="text" name="b_din_u_id_din_list_id" tabindex="-1" value="">
+      <input type="text" name="b_3645dc87336497ae12b0a4463_6b07e43093" tabindex="-1" value="">
     </div>
-    
     <button type="submit" class="newsletter-btn">meld på</button>
   </form>
+  <script type="text/javascript" src="//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js"></script>
 </section>
 {% endblock content %}

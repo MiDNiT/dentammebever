@@ -21,7 +21,7 @@
     {% for note in section.pages %}
       {% set category = note.extra.category | default(value="generelt") %}
       
-      <a href="{{ note.permalink | safe }}" class="note-card" 
+      <a href="{{ note.path | safe }}" class="note-card" 
          data-title="{{ note.title }}" 
          data-summary="{{ note.description | default(value=note.summary | default(value="")) }}" 
          data-tags="{{ note.taxonomies.tags | default(value=[]) | join(sep=", ") }}"
