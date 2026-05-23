@@ -10,5 +10,9 @@
 <body>
   <!-- Decap CMS lastes fra CDN – ingen installasjon nødvendig -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    // Injisér nettsidens CSS inn i CMS-forhåndsvisningen
+    CMS.registerPreviewStyle("/css/style.css");
+  </script>
 </body>
 </html>

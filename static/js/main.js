@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- Smart Link Prefetcher for Instant Page Loads ---
+  // --- Intelligent Page-Wide Prefetcher for Instant Load Times ---
   (function() {
     const prefetchCache = new Set();
 
@@ -225,12 +225,26 @@ document.addEventListener('DOMContentLoaded', () => {
       document.head.appendChild(link);
     }
 
+    // 1. Bulk prefetch all article links on the page once the site is fully loaded and idle
+    window.addEventListener('load', () => {
+      // Small delay (200ms) to ensure everything else has settled first
+      setTimeout(() => {
+        const articleLinks = document.querySelectorAll('a[href^="/garden/"]');
+        articleLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          if (href && !href.includes('/admin/')) {
+            prefetchLink(href);
+          }
+        });
+      }, 200);
+    });
+
+    // 2. Fallback hover/touch listener for dynamically loaded links or other sections
     document.addEventListener('pointerover', function(e) {
       const anchor = e.target.closest('a');
       if (!anchor) return;
 
       const href = anchor.getAttribute('href');
-      // Prefetch local articles but skip external urls or the CMS administrative pages
       if (href && href.startsWith('/garden/') && !href.includes('/admin/')) {
         prefetchLink(href);
       }
@@ -246,6 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }, { passive: true });
   })();
+
 
   // --- Code Copy Buttons ---
   const codeBlocks = document.querySelectorAll('pre');
