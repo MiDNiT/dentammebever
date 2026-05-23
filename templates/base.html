@@ -72,6 +72,12 @@
       </nav>
       
       <div class="header-actions">
+        <button id="search-toggle" class="search-btn" aria-label="Åpne søk (Ctrl+K)">
+          <svg viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
         <button id="theme-toggle" class="theme-btn" aria-label="Veksle fargetema (lys, sepia, mørk)">
           <!-- Sun Icon (for dark theme) -->
           <svg class="sun-icon" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -89,6 +95,7 @@
           </svg>
         </button>
       </div>
+
 
     </div>
   </header>
@@ -156,7 +163,34 @@
   {# --- Bever Egg Toast Notification --- #}
   <div id="bever-toast" class="bever-toast" aria-live="polite"></div>
 
+  {# --- Glassmorphic Command Palette Search Modal --- #}
+  <div id="search-modal" class="search-modal" aria-hidden="true" role="dialog" aria-labelledby="search-modal-title">
+    <div class="search-modal-content">
+      <div class="search-modal-header">
+        <svg class="search-modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="search-modal-input" class="search-modal-input" placeholder="Søk etter alt i hagen..." autocomplete="off" aria-label="Søk">
+        <div class="search-modal-hints">
+          <span class="search-hint-badge">esc</span>
+          <span class="search-hint-text">lukk</span>
+        </div>
+      </div>
+      <div class="search-modal-results-container">
+        <ul id="search-modal-results" class="search-modal-results-list">
+          <li class="search-status-item">Skriv inn et søkeord for å dypdykke i hagen...</li>
+        </ul>
+      </div>
+      <div class="search-modal-footer">
+        <span class="search-nav-hint"><kbd>↑↓</kbd> navigér</span>
+        <span class="search-nav-hint"><kbd>↵</kbd> velg</span>
+      </div>
+    </div>
+  </div>
+
   {# --- Main JS --- #}
   <script src="/js/main.js"></script>
+
 </body>
 </html>

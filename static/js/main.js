@@ -490,7 +490,222 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   })();
 
+
+  // --- Glassmorphic Command Palette (CMD+K) Search ---
+  (function() {
+    const searchModal = document.getElementById('search-modal');
+    const searchInput = document.getElementById('search-modal-input');
+    const searchResults = document.getElementById('search-modal-results');
+    const searchToggle = document.getElementById('search-toggle');
+    
+    if (!searchModal || !searchInput || !searchResults) return;
+
+    let indexLoaded = false;
+    let elasticIndex = null;
+    let activeResultIdx = -1;
+
+    // Load scripts dynamically to preserve page load speed
+    function loadSearchEngine(callback) {
+      if (indexLoaded) {
+        if (callback) callback();
+        return;
+      }
+
+      // Show loading status
+      searchResults.innerHTML = '<li class="search-status-item">Laster inn søkemotoren...</li>';
+
+      // Load elasticlunr
+      const elScript = document.createElement('script');
+      elScript.src = '/elasticlunr.min.js';
+      elScript.onload = () => {
+        // Load search index (Zola generates search_index.no.js by default for language 'no')
+        const idxScript = document.createElement('script');
+        idxScript.src = '/search_index.no.js';
+        idxScript.onload = () => {
+          if (window.searchIndex) {
+            elasticIndex = elasticlunr.Index.load(window.searchIndex);
+            indexLoaded = true;
+            if (callback) callback();
+          } else {
+            searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Kunne ikke hente søkeindeksen.</li>';
+          }
+        };
+        idxScript.onerror = () => {
+          searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Kunne ikke laste søkeindeks-filen.</li>';
+        };
+        document.body.appendChild(idxScript);
+      };
+      elScript.onerror = () => {
+        searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Kunne ikke laste søkemotoren (elasticlunr).</li>';
+      };
+      document.body.appendChild(elScript);
+    }
+
+    function openSearch() {
+      searchModal.classList.add('open');
+      searchModal.setAttribute('aria-hidden', 'false');
+      loadSearchEngine(() => {
+        searchInput.focus();
+        performSearch(); // Perform search on empty query/previous query
+      });
+    }
+
+    function closeSearch() {
+      searchModal.classList.remove('open');
+      searchModal.setAttribute('aria-hidden', 'true');
+      searchInput.blur();
+    }
+
+    if (searchToggle) {
+      searchToggle.addEventListener('click', openSearch);
+    }
+
+    searchModal.addEventListener('click', (e) => {
+      if (e.target === searchModal) {
+        closeSearch();
+      }
+    });
+
+    // Keyboard trigger bindings (CMD+K, Ctrl+K, /, Esc)
+    document.addEventListener('keydown', (e) => {
+      // CMD+K or Ctrl+K
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (searchModal.classList.contains('open')) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+
+      // Slash key '/' (only when not typing in form inputs)
+      if (e.key === '/' && !searchModal.classList.contains('open') &&
+          document.activeElement.tagName !== 'INPUT' && 
+          document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        openSearch();
+      }
+
+      // Esc to close
+      if (e.key === 'Escape' && searchModal.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+
+    // Arrow navigation inside results list
+    searchInput.addEventListener('keydown', (e) => {
+      const items = searchResults.querySelectorAll('.search-result-item');
+      if (items.length === 0) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeResultIdx = (activeResultIdx + 1) % items.length;
+        updateActiveResult(items);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeResultIdx = (activeResultIdx - 1 + items.length) % items.length;
+        updateActiveResult(items);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (activeResultIdx >= 0 && activeResultIdx < items.length) {
+          const link = items[activeResultIdx].querySelector('a');
+          if (link) link.click();
+        }
+      }
+    });
+
+    function updateActiveResult(items) {
+      items.forEach((item, idx) => {
+        if (idx === activeResultIdx) {
+          item.classList.add('active');
+          item.scrollIntoView({ block: 'nearest' });
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', performSearch);
+
+    function performSearch() {
+      if (!indexLoaded || !elasticIndex) return;
+
+      const query = searchInput.value.trim().toLowerCase();
+      activeResultIdx = -1;
+
+      if (query === '') {
+        searchResults.innerHTML = '<li class="search-status-item">Skriv inn et søkeord for å dypdykke i hagen...</li>';
+        return;
+      }
+
+      const rawResults = elasticIndex.search(query, {
+        fields: {
+          title: { boost: 3 },
+          description: { boost: 2 },
+          body: { boost: 1 }
+        },
+        bool: "OR",
+        expand: true
+      });
+
+      if (rawResults.length === 0) {
+        searchResults.innerHTML = '<li class="search-status-item">Ingen treff matcher søket ditt...</li>';
+        return;
+      }
+
+      searchResults.innerHTML = ''; // Clear status
+
+      rawResults.forEach((res) => {
+        const doc = elasticIndex.documentStore.getDoc(res.ref);
+        if (!doc) return;
+
+        // Strip absolute url prefixes to support relative URLs perfectly
+        const relativeUrl = doc.id.replace(window.location.origin, "").replace("https://dentammebever.no", "");
+        
+        const li = document.createElement('li');
+        li.className = 'search-result-item';
+
+        // Extract category (Zola standard structure or falls back to garden/general)
+        let category = 'generelt';
+        if (relativeUrl.includes('/garden/')) {
+          category = 'hagenotat';
+        }
+
+        // Highlight matching terms in excerpt
+        let excerpt = doc.description || doc.body || '';
+        if (excerpt.length > 140) {
+          // Find search term position in body to center excerpt around it!
+          const queryIdx = excerpt.toLowerCase().indexOf(query);
+          if (queryIdx > 60) {
+            excerpt = '...' + excerpt.substring(queryIdx - 50, queryIdx + 90) + '...';
+          } else {
+            excerpt = excerpt.substring(0, 140) + '...';
+          }
+        }
+
+        // Safe highlight replace
+        const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        const highlightRegex = new RegExp(`(${escapedQuery})`, 'gi');
+        const highlightedExcerpt = excerpt.replace(highlightRegex, '<mark>$1</mark>');
+        const highlightedTitle = doc.title.replace(highlightRegex, '<mark>$1</mark>');
+
+        li.innerHTML = `
+          <a href="${relativeUrl}" class="search-result-link">
+            <div class="search-result-header">
+              <span class="search-result-title">${highlightedTitle.toLowerCase()}</span>
+              <span class="search-result-category">#${category}</span>
+            </div>
+            <p class="search-result-excerpt">${highlightedExcerpt}</p>
+          </a>
+        `;
+
+        searchResults.appendChild(li);
+      });
+    }
+  })();
+
   if ('serviceWorker' in navigator) {
+
 
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')

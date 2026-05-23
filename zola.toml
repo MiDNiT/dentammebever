@@ -9,6 +9,12 @@ default_language = "no"
 generate_feeds = true
 feed_filenames = ["rss.xml"]
 
+# Innebygd søkeindeks for fulltekstsøk (ElasticLunr)
+[search]
+build_search_index = true
+index_format = "elasticlunr_javascript"
+
+
 [markdown.highlighting]
 theme = "github-dark"
 
