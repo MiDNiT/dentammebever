@@ -34,7 +34,7 @@
   </script>
   
   {# --- CSS Stylesheet --- #}
-  <link rel="stylesheet" href="{{ get_url(path="css/style.css") | safe }}">
+  <link rel="stylesheet" href="/css/style.css">
   
   {# --- Etisk, personvernvennlig og lynrask besøksstatistikk (Plausible Analytics) --- #}
   <script defer data-domain="dentammebever.no" src="https://plausible.io/js/script.js"></script>
@@ -116,7 +116,7 @@
         {% endif %}
       </div>
       
-      <p class="footer-copy">&copy; 2026 {{ config.extra.author }}. Bygget med lynrask, statisk <a href="https://www.getzola.org" target="_blank" rel="noopener noreferrer">Zola</a>, HTML og ren CSS. &middot; <a href="{{ get_url(path="personvern") | safe }}">personvern</a> &middot; <a href="#" target="_blank" rel="noopener noreferrer">støtt mitt arbeid</a> &middot; <span class="bever-egg" id="bever-egg" title="beverens demning" role="button" aria-label="Bever-demning status">🦫</span></p>
+      <p class="footer-copy">&copy; 2026 {{ config.extra.author }}. Bygget med lynrask, statisk <a href="https://www.getzola.org" target="_blank" rel="noopener noreferrer">Zola</a>, HTML og ren CSS. &middot; <a href="/personvern">personvern</a> &middot; <a href="#" target="_blank" rel="noopener noreferrer">støtt mitt arbeid</a> &middot; <span class="bever-egg" id="bever-egg" title="beverens demning" role="button" aria-label="Bever-demning status">🦫</span></p>
     </div>
   </footer>
 
@@ -151,6 +151,6 @@
   <div id="bever-toast" class="bever-toast" aria-live="polite"></div>
 
   {# --- Main JS --- #}
-  <script src="{{ get_url(path="js/main.js") | safe }}"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>
