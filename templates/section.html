@@ -28,7 +28,8 @@
          data-category="{{ category | lower }}">
         
         <div class="card-header">
-          <span class="note-date">{{ note.date | date(format="%d. %b %Y") }}</span>
+          <span class="note-date">{{ note.date | date(format="%d.%m.%Y") }}</span>
+
           <span class="note-category">#{{ category }}</span>
         </div>
         

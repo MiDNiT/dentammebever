@@ -27,7 +27,7 @@
           <line x1="8" y1="2" x2="8" y2="6"></line>
           <line x1="3" y1="10" x2="21" y2="10"></line>
         </svg>
-        {{ page.date | date(format="%d. %b %Y") }}
+        {{ page.date | date(format="%d.%m.%Y") }}
       </span>
       
       {% if page.updated and page.updated != page.date %}
@@ -36,9 +36,10 @@
           <path d="M12 20h9"></path>
           <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
         </svg>
-        sist endret: {{ page.updated | date(format="%d. %b %Y") }}
+        sist endret: {{ page.updated | date(format="%d.%m.%Y") }}
       </span>
       {% endif %}
+
 
       
       {% if page.reading_time %}
