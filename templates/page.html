@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block seo %}
+  <title>{{ page.title }} | {{ config.title }}</title>
+  <meta name="description" content="{{ page.description | default(value=page.summary | default(value=config.description)) }}">
+{% endblock seo %}
+
+{% block content %}
+<article class="note-view-container">
+  {# --- Breadcrumb Nav --- #}
+  <header class="note-meta-header">
+    <a href="{{ config.base_url | safe }}" class="note-back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      Tilbake til hagen
+    </a>
+    
+    <h1 class="note-view-title">{{ page.title }}</h1>
+    
+    <div class="note-meta-info">
+      <span class="meta-item" title="Publisert dato">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        {{ page.date | date(format="%d. %b %Y") }}
+      </span>
+      
+      {% if page.reading_time %}
+      <span class="meta-item" title="Estimert lesetid">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        {{ page.reading_time }} min lesing
+      </span>
+      {% endif %}
+      
+      <span class="meta-item">
+        <strong>Kategori:</strong> #{{ page.extra.category | default(value="generelt") }}
+      </span>
+    </div>
+  </header>
+
+  {# --- Article Body --- #}
+  <section class="note-body">
+    {{ page.content | safe }}
+  </section>
+
+  {# --- Backlinks (Minimal inline links) --- #}
+  {% if page.backlinks | length > 0 %}
+  <footer class="backlinks-section">
+    <span class="backlinks-label">referert fra:</span>
+    {% for link in page.backlinks %}
+      <a href="{{ link.permalink | safe }}" class="backlink-inline">{{ link.title | lower }}</a>{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </footer>
+  {% endif %}
+
+  {# --- Interactive Local Graph View --- #}
+  <div class="note-graph-wrapper">
+    <h3 class="graph-title">relasjonskart<span class="logo-dot">.</span></h3>
+    <div id="note-graph-container" 
+         data-current-title="{{ page.title | lower }}" 
+         data-current-url="{{ page.permalink | safe }}"
+         data-backlinks="{% if page.backlinks | length > 0 %}[{% for link in page.backlinks %}{&quot;title&quot;: &quot;{{ link.title | lower }}&quot;, &quot;permalink&quot;: &quot;{{ link.permalink | safe }}&quot;}{% if not loop.last %}, {% endif %}{% endfor %}]{% else %}[]{% endif %}">
+      <!-- SVG dynamic canvas rendered by JS -->
+    </div>
+  </div>
+
+</article>
+{% endblock content %}

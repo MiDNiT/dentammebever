@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block seo %}
+  <title>siden ble ikke funnet | {{ config.title }}</title>
+  <meta name="description" content="Feil 404: Siden du leter etter finnes ikke eller har blitt flyttet av beverne.">
+{% endblock seo %}
+
+{% block content %}
+<section class="error-container">
+  <div class="error-visual">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="error-icon">
+      <path d="M12 2L2 22h20L12 2z"></path>
+      <line x1="12" y1="9" x2="12" y2="13"></line>
+      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+    </svg>
+  </div>
+  
+  <h1 class="error-title">feil 404<span class="logo-dot">.</span></h1>
+  <p class="error-subtitle">beveren har ikke bygget denne grenen av demningen enda.</p>
+  <p class="error-message">Siden du leter etter har enten blitt flyttet, slettet eller har aldri eksistert i dette økosystemet.</p>
+  
+  <div class="error-actions">
+    <a href="{{ config.base_url | safe }}" class="error-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+      svøm hjem igjen
+    </a>
+  </div>
+</section>
+{% endblock content %}

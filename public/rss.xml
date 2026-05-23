@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+      <title>Den Tamme Bever</title>
+      <link>https://dentammebever.no</link>
+      <description>Et økosystem av tanker, notater, kode og ideer, bygget bit for bit.</description>
+      <generator>Zola</generator>
+      <language>no</language>
+      <atom:link href="https://dentammebever.no/rss.xml" rel="self" type="application/rss+xml"/>
+      <lastBuildDate>Sat, 23 May 2026 00:00:00 +0000</lastBuildDate>
+      <item>
+          <title>Notatboken som et levende økosystem</title>
+          <pubDate>Sat, 23 May 2026 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://dentammebever.no/garden/digital-gardening/</link>
+          <guid>https://dentammebever.no/garden/digital-gardening/</guid>
+          <description xml:base="https://dentammebever.no/garden/digital-gardening/">&lt;p&gt;En bever bygger ikke bare en demning for å bo i. Ved å demme opp vannet, felle trær og grave kanaler, endrer beveren hele landskapet rundt seg. Den skaper et levende &lt;strong&gt;økosystem&lt;&#x2F;strong&gt; av våtmarker, dammer og kanaler der utallige andre arter kan leve og trives.&lt;&#x2F;p&gt;
+&lt;p&gt;Dette nettstedet er bygget etter akkurat det samme prinsippet. Det er ikke en tradisjonell blogg der gamle innlegg gjemmes bort kronologisk. I stedet bygger jeg et &lt;strong&gt;personlig kunnskaps-økosystem&lt;&#x2F;strong&gt; – bit for bit.&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;beverens-arbeidsmetode-i-praksis&quot;&gt;Beverens arbeidsmetode i praksis&lt;&#x2F;h2&gt;
+&lt;p&gt;Når jeg lærer noe nytt eller utforsker en idé, feller jeg en ny stamme og legger den til i demningen:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Fange opp råmateriale:&lt;&#x2F;strong&gt; Hver tanke starter som en enkel stamme. Jeg lagrer tankene mine i Markdown-filer.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Koble sammen kanalene:&lt;&#x2F;strong&gt; I stedet for isolerte notater, oppretter jeg &lt;strong&gt;toveis-koblinger&lt;&#x2F;strong&gt; (backlinks). Disse fungerer som beverens kanaler – de gjør det enkelt å flyte fra et tema til et annet, oppdage uventede sammenhenger, og la ideene befrukte hverandre. For eksempel kan du utforske min &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;obsidian-workflow&#x2F;&quot;&gt;Obsidian-arbeidsflyt&lt;&#x2F;a&gt; for å se verktøyene jeg bruker til å forme notatene mine, eller lese om hvorfor jeg har valgt &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;zola-speed&#x2F;&quot;&gt;Zola for maksimal hastighet&lt;&#x2F;a&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Skape et varig økosystem:&lt;&#x2F;strong&gt; Ved å koble sammen notater om &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;litteratur-notat&#x2F;&quot;&gt;litteratur og stoisisme&lt;&#x2F;a&gt; eller en &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;investerings-filosofi&#x2F;&quot;&gt;minimalistisk investeringsfilosofi&lt;&#x2F;a&gt;, oppstår det en synergieffekt der summen av kunnskapen blir større enn de enkelte delene.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&quot;A bever builds a dam, and in doing so, changes the entire valley. A thinker builds a network of ideas, and in doing so, changes their entire perspective.&quot;&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Dette nettstedet er mitt personlige økosystem. Klikk deg gjerne rundt og se hvordan de ulike delene henger sammen!&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Personvern og informasjonskapsler</title>
+          <pubDate>Sat, 23 May 2026 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://dentammebever.no/personvern/</link>
+          <guid>https://dentammebever.no/personvern/</guid>
+          <description xml:base="https://dentammebever.no/personvern/">&lt;p&gt;Dette nettstedet er bygget for å dele innsikt, notater og prosjekter, og for å være en bærekraftig plattform som kan vokse over tid. For å drifte og videreutvikle nettsiden, levere nyhetsbrev, og muliggjøre fremtidige kommersielle løsninger, behandler vi visse typer data i overensstemmelse med gjeldende personvernlovgivning (GDPR).&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;informasjonskapsler-cookies-og-sporing&quot;&gt;Informasjonskapsler (Cookies) og sporing&lt;&#x2F;h2&gt;
+&lt;p&gt;For å forstå hvordan nettsiden brukes, analysere trafikk og optimalisere brukeropplevelsen, benytter vi oss av informasjonskapsler og sporingsteknologier.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Besøksstatistikk og analyse:&lt;&#x2F;strong&gt; Vi samler inn data om besøkende for å se hvilke artikler som er mest populære, hvor trafikken kommer fra, og hvordan brukere navigerer på siden. Dette hjelper oss med å forbedre innholdet og tilpasse nettsiden.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Fremtidige kommersielle verktøy:&lt;&#x2F;strong&gt; For å muliggjøre fremtidig inntjening og bærekraftig drift, forbeholder vi oss retten til å ta i bruk tredjeparts sporingsteknologier. Dette kan inkludere analyseverktøy (som Google Analytics), annonseringsnettverk, affiliate-sporing (for provisjonslenker), og sosiale medier-piksler.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Samtykke:&lt;&#x2F;strong&gt; Dersom vi tar i bruk informasjonskapsler eller verktøy som krever et aktivt samtykke under personvernregelverket, vil et samtykkebanner bli presentert for deg slik at du har full kontroll over dine data.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;behandling-av-data-og-nyhetsbrev&quot;&gt;Behandling av data og nyhetsbrev&lt;&#x2F;h2&gt;
+&lt;p&gt;Når du melder deg på vårt nyhetsbrev, samler vi inn din e-postadresse og eventuelt ditt navn for å kunne sende deg relevante oppdateringer.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Bruk av data:&lt;&#x2F;strong&gt; E-postadressen din brukes til å sende deg oppdateringer, artikler, og eventuelle relevante tilbud eller nyheter fra Den Tamme Bever og våre partnere.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Sporing i nyhetsbrev:&lt;&#x2F;strong&gt; Vi kan bruke analyseverktøy i nyhetsbrevene for å måle åpningsrater og klikk på lenker. Dette gjør vi for å forstå hva slags innhold våre abonnenter er mest interessert i, slik at vi kan levere bedre innhold og optimalisere eventuelle sponsorater eller affiliate-kampanjer.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Tredjepartsleverandører:&lt;&#x2F;strong&gt; Vi bruker pålitelige e-postleverandører for å sende ut nyhetsbrev, og dine opplysninger lagres sikkert hos dem. Vi selger aldri e-postadressen din videre til frittstående tredjeparter.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Avmelding:&lt;&#x2F;strong&gt; Du kan når som helst melde deg av nyhetsbrevet ved å bruke avmeldingslenken nederst i hver e-post.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;finansiering-sponsing-og-affiliate-lenker&quot;&gt;Finansiering, sponsing og affiliate-lenker&lt;&#x2F;h2&gt;
+&lt;p&gt;Den Tamme Bever har som mål å være en økonomisk bærekraftig plattform. For å finansiere driften og tjene penger på innholdet, benytter vi, eller vil vi benytte, følgende metoder:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Affiliate-lenker:&lt;&#x2F;strong&gt; Vi kan inkludere lenker til produkter, bøker, eller tjenester der vi mottar en liten provisjon dersom du foretar et kjøp via lenken. Dette koster ikke deg noe ekstra. Disse lenkene kan bruke informasjonskapsler for å spore salget tilbake til oss.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Sponsede innlegg og samarbeid:&lt;&#x2F;strong&gt; Vi kan publisere artikler eller notater skrevet i samarbeid med eller på oppdrag fra relevante partnere. Slike innlegg vil alltid være tydelig merket som sponsede eller som et annonsesamarbeid.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Sponsorer og annonsering:&lt;&#x2F;strong&gt; Vi kan vise annonser eller logoer fra partnere og sponsorer på nettstedet. Disse tredjepartene kan bruke informasjonskapsler for å tilpasse og måle effekten av sine annonser.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;eksterne-lenker&quot;&gt;Eksterne lenker&lt;&#x2F;h2&gt;
+&lt;p&gt;Nettstedet inneholder lenker til andre nettsider. Vi har ingen kontroll over, og påtar oss ikke ansvar for, personvernpraksisen eller innholdet på disse eksterne nettstedene. Vi anbefaler at du leser personvernerklæringene til de nettstedene du besøker.&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;kontakt-oss&quot;&gt;Kontakt oss&lt;&#x2F;h2&gt;
+&lt;p&gt;Hvis du har spørsmål om vår personvernerklæring, informasjonskapsler eller databehandling, kan du kontakte oss på: &lt;strong&gt;hei@dentammebever.no&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Min Obsidian-arbeidsflyt</title>
+          <pubDate>Fri, 22 May 2026 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://dentammebever.no/garden/obsidian-workflow/</link>
+          <guid>https://dentammebever.no/garden/obsidian-workflow/</guid>
+          <description xml:base="https://dentammebever.no/garden/obsidian-workflow/">&lt;p&gt;&lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;obsidian.md&quot;&gt;Obsidian&lt;&#x2F;a&gt; har blitt mitt absolutte favorittverktøy for det man kaller &lt;em&gt;Personal Knowledge Management&lt;&#x2F;em&gt; (PKM). Siden Obsidian lagrer alt som lokale Markdown-filer, passer det helt perfekt sammen med statiske nettsidegeneratorer.&lt;&#x2F;p&gt;
+&lt;p&gt;Dette nettstedet er et direkte resultat av denne strukturerte bever-arbeidsflyten!&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;fra-tanke-til-okosystem&quot;&gt;Fra tanke til økosystem&lt;&#x2F;h2&gt;
+&lt;p&gt;Arbeidsflyten min er delt inn i tre enkle steg:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Fange opp (Inbox):&lt;&#x2F;strong&gt; Jeg oppretter raskt et nytt notat i Obsidian når jeg lærer noe nytt eller får en idé. Dette er min råvare – en trestamme som skal bearbeides.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Koble sammen kanalene:&lt;&#x2F;strong&gt; Jeg går gjennom notatene ukentlig og oppretter toveis-koblinger. Koblinger hjelper meg å huske sammenhenger. For eksempel, når jeg skriver om ytelse, kobler jeg det direkte til &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;zola-speed&#x2F;&quot;&gt;Zola static site generator&lt;&#x2F;a&gt;.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Bygge demningen (Export):&lt;&#x2F;strong&gt; Med et enkelt skript (eller Git-push) kopierer jeg de notatene jeg ønsker å dele offentlig over i &lt;code&gt;content&#x2F;garden&#x2F;&lt;&#x2F;code&gt;-mappen til Zola-prosjektet mitt.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;hvorfor-lokale-markdown-filer-er-overlegne&quot;&gt;Hvorfor lokale Markdown-filer er overlegne&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Fremtidssikret:&lt;&#x2F;strong&gt; Markdown er ren tekst. Selv om Obsidian skulle forsvinne om ti år, kan jeg fortsatt lese alle notatene mine.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Portabilitet:&lt;&#x2F;strong&gt; Jeg kan bruke de samme filene i Zola, Hugo, eller bare søke i dem med standard terminalverktøy.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Versjonskontroll:&lt;&#x2F;strong&gt; Git gjør det superenkelt å spore endringer over tid.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Hvis du vil lære mer om teorien bak hvorfor jeg foretrekker denne metoden fremfor en tradisjonell blogg, kan du lese notatet mitt om &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;digital-gardening&#x2F;&quot;&gt;hvordan notatboken fungerer som et levende økosystem&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Hvorfor Zola er så ekstremt kjapp</title>
+          <pubDate>Thu, 21 May 2026 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://dentammebever.no/garden/zola-speed/</link>
+          <guid>https://dentammebever.no/garden/zola-speed/</guid>
+          <description xml:base="https://dentammebever.no/garden/zola-speed/">&lt;p&gt;Når målet er å lage en nettside som laster umiddelbart, er &lt;a rel=&quot;external&quot; href=&quot;https:&#x2F;&#x2F;www.getzola.org&quot;&gt;Zola&lt;&#x2F;a&gt; et av de absolutt beste verktøyene som finnes. Men hvorfor er det så raskt?&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;1-skrevet-i-rust&quot;&gt;1. Skrevet i Rust&lt;&#x2F;h2&gt;
+&lt;p&gt;Zola er bygget fra bunnen av i programmeringsspråket Rust. Rust er kjent for sin ekstreme ytelse, trådsikkerhet og minimale minnebruk. Zola kompilerer hundrevis av sider på bare noen få millisekunder.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;2-en-enkelt-binaerfil-zero-dependencies&quot;&gt;2. Én enkelt binærfil (Zero Dependencies)&lt;&#x2F;h2&gt;
+&lt;p&gt;Mange andre verktøy (som Gatsby, Next.js eller Jekyll) krever at du installerer hundrevis av megabytes med &lt;code&gt;node_modules&lt;&#x2F;code&gt; eller Ruby gems. Zola krever ingenting av dette. Det er en enkelt, ferdigkompilert fil som bare kjører.&lt;&#x2F;p&gt;
+&lt;p&gt;Dette betyr:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Null sårbarheter i tredjepartsavhengigheter.&lt;&#x2F;li&gt;
+&lt;li&gt;Lynrask oppstart (ingen lastetid for node-kjøretid).&lt;&#x2F;li&gt;
+&lt;li&gt;Utrolig enkel distribusjon (du bare kjører en kommando).&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;integrasjon-med-kunnskapsnettverk&quot;&gt;Integrasjon med Kunnskapsnettverk&lt;&#x2F;h2&gt;
+&lt;p&gt;For et personlig &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;digital-gardening&#x2F;&quot;&gt;kunnskaps-økosystem&lt;&#x2F;a&gt; er ytelse helt essensielt. Siden vi ønsker å koble sammen hundrevis av notater ved hjelp av en &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;obsidian-workflow&#x2F;&quot;&gt;Obsidian-arbeidsflyt&lt;&#x2F;a&gt;, trenger vi en generator som klarer å bygge relasjoner (som toveis-koblinger&#x2F;backlinks) lynraskt uten at byggetiden øker eksponensielt.&lt;&#x2F;p&gt;
+&lt;p&gt;Zola løser dette ved å holde hele kunnskapsgrafen i minnet under bygging, noe som gjør at lenkesjekking og backlink-generering skjer parallelt og umiddelbart.&lt;&#x2F;p&gt;
+&lt;pre class=&quot;giallo&quot; style=&quot;color: #E1E4E8; background-color: #24292E;&quot;&gt;&lt;code data-lang=&quot;shellscript&quot;&gt;&lt;span class=&quot;giallo-l&quot;&gt;&lt;span style=&quot;color: #6A737D;&quot;&gt;# Sjekk byggetiden selv!&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;
+&lt;span class=&quot;giallo-l&quot;&gt;&lt;span style=&quot;color: #B392F0;&quot;&gt;.&#x2F;bin&#x2F;zola&lt;&#x2F;span&gt;&lt;span style=&quot;color: #9ECBFF;&quot;&gt; build&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;Resultatet er en nettside som oppnår 100&#x2F;100 på Google Lighthouse ut av boksen.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>Meditasjoner av Marcus Aurelius</title>
+          <pubDate>Wed, 20 May 2026 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://dentammebever.no/garden/litteratur-notat/</link>
+          <guid>https://dentammebever.no/garden/litteratur-notat/</guid>
+          <description xml:base="https://dentammebever.no/garden/litteratur-notat/">&lt;p&gt;&lt;em&gt;Meditasjoner&lt;&#x2F;em&gt; av Marcus Aurelius er ikke en bok skrevet for offentligheten. Det var den romerske keiserens private dagbok, skrevet til seg selv under militære felttog, som en kilde til selvdisiplin og mental styrke.&lt;&#x2F;p&gt;
+&lt;p&gt;Prinsippene i boken utgjør kjernen i stoisismen, en filosofisk retning som er ekstremt relevant den dag i dag.&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;sentrale-stoiske-ideer&quot;&gt;Sentrale stoiske ideer&lt;&#x2F;h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Dikotomien om kontroll:&lt;&#x2F;strong&gt; Det finnes ting vi kan kontrollere (våre egne tanker, handlinger, reaksjoner), og ting vi ikke kan kontrollere (andres oppførsel, naturkatastrofer, fortiden, fremtiden). Lidelse oppstår når vi prøver å kontrollere det ytre.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Karakter over alt annet:&lt;&#x2F;strong&gt; Det eneste ekte godet er å handle rettferdig, modig, disiplinert og klokt. Ytre suksess, rikdom eller berømmelse er nøytrale – de er fine å ha, men definerer ikke din verdi.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Memento Mori:&lt;&#x2F;strong&gt; Husk at du skal dø. Dette er ikke tenkt som en deprimerende tanke, men som en påminnelse om å sette pris på nuet og fokusere på det som er viktig.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;kobling-til-moderne-kunnskap&quot;&gt;Kobling til moderne kunnskap&lt;&#x2F;h2&gt;
+&lt;p&gt;Det fascinerende med denne boken er at den er bygget opp akkurat som mitt personlige &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;digital-gardening&#x2F;&quot;&gt;kunnskaps-økosystem&lt;&#x2F;a&gt;. Marcus Aurelius skrev ikke i lange kapitler, men i korte, frittstående avsnitt og aforismer som refererer til hverandre.&lt;&#x2F;p&gt;
+&lt;p&gt;Det var hans personlige, stoiske kunnskapsbase – hans eget rom for refleksjon og mental robusthet.&lt;&#x2F;p&gt;
+</description>
+      </item>
+      <item>
+          <title>En minimalistisk investeringsfilosofi</title>
+          <pubDate>Tue, 19 May 2026 00:00:00 +0000</pubDate>
+          <author>Unknown</author>
+          <link>https://dentammebever.no/garden/investerings-filosofi/</link>
+          <guid>https://dentammebever.no/garden/investerings-filosofi/</guid>
+          <description xml:base="https://dentammebever.no/garden/investerings-filosofi/">&lt;p&gt;Finansverdenen er støyende. Hver dag er det nye analyser, aksjetips, spådommer om markedsfall, og råd om &quot;den neste store tingen&quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Min investeringsfilosofi er, i likhet med resten av dette &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;digital-gardening&#x2F;&quot;&gt;notat-økosystemet&lt;&#x2F;a&gt;, basert på prinsippet om &lt;strong&gt;minimalisme&lt;&#x2F;strong&gt; og enkelhet.&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;de-tre-stodige-soylene&quot;&gt;De tre stødige søylene&lt;&#x2F;h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;Passive indeksfond:&lt;&#x2F;strong&gt; I stedet for å prøve å velge enkeltaksjer (som over 90% av profesjonelle forvaltere mislykkes med å gjøre bedre enn markedet over tid), kjøper jeg hele markedet billig gjennom globale indeksfond.&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Tid i markedet slår å time markedet:&lt;&#x2F;strong&gt; Det er umulig å forutsi når bunnen eller toppen er nådd. Den mest pålitelige måten å bygge formue på er å investere et fast beløp hver måned, uansett om markedet går opp eller ned (Dollar Cost Averaging).&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;strong&gt;Minimere kostnader:&lt;&#x2F;strong&gt; Gebyrer spiser avkastning. Ved å velge lavkostnadsfond sikrer jeg at mest mulig av rentes-rente-effekten går direkte til meg.&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;kobling-til-mental-balanse&quot;&gt;Kobling til mental balanse&lt;&#x2F;h2&gt;
+&lt;p&gt;Denne investeringsmetoden krever minimalt med tid og oppmerksomhet. Akkurat som en god &lt;a href=&quot;https:&#x2F;&#x2F;dentammebever.no&#x2F;garden&#x2F;litteratur-notat&#x2F;&quot;&gt;stoisk filosofi&lt;&#x2F;a&gt; lærer oss å ignorere ytre støy og fokusere på det vi kan kontrollere, lærer denne investeringsmodellen oss å ignorere daglige svingninger og ha tro på den langsiktige globale veksten.&lt;&#x2F;p&gt;
+&lt;p&gt;Det enkle er ofte det beste – både i kode, design, finans og beverbygging.&lt;&#x2F;p&gt;
+</description>
+      </item>
+    </channel>
+</rss>

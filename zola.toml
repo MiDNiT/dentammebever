@@ -1,0 +1,18 @@
+# Hovedkonfigurasjon for Den Tamme Bever
+
+title = "Den Tamme Bever"
+description = "Et økosystem av tanker, notater, kode og ideer, bygget bit for bit."
+base_url = "https://dentammebever.no"
+default_language = "no"
+
+# Automatisk generering av RSS-feed
+generate_feeds = true
+feed_filenames = ["rss.xml"]
+
+[markdown.highlighting]
+theme = "github-dark"
+
+[extra]
+author = "Den Tamme Bever"
+github_url = "https://github.com/dentammebever"
+email = "hei@dentammebever.no"

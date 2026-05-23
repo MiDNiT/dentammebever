@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-section">
+  <h1 class="hero-title">{{ section.title | default(value="notater") | lower }}<span class="logo-dot">.</span></h1>
+  <p class="hero-subtitle">{{ section.description | default(value="En samling av notater, artikler og prosjekter.") }}</p>
+</section>
+
+<div class="garden-explorer">
+  {# --- Search Bar --- #}
+  <div class="search-wrapper">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input type="text" id="garden-search" class="search-input" placeholder="Søk..." aria-label="Søk">
+  </div>
+
+  {# --- Dynamic Garden Grid --- #}
+  <div class="garden-grid" id="garden-grid">
+    {% for note in section.pages %}
+      {% set category = note.extra.category | default(value="generelt") %}
+      
+      <a href="{{ note.permalink | safe }}" class="note-card" 
+         data-title="{{ note.title }}" 
+         data-summary="{{ note.description | default(value=note.summary | default(value="")) }}" 
+         data-tags="{{ note.taxonomies.tags | default(value=[]) | join(sep=", ") }}"
+         data-category="{{ category | lower }}">
+        
+        <div class="card-header">
+          <span class="note-date">{{ note.date | date(format="%d. %b %Y") }}</span>
+          <span class="note-category">#{{ category }}</span>
+        </div>
+        
+        <h2 class="note-title">{{ note.title }}</h2>
+        
+        <p class="note-summary">
+          {% if note.description %}
+            {{ note.description }}
+          {% elif note.summary %}
+            {{ note.summary | striptags }}
+          {% else %}
+            {{ note.content | striptags | truncate(length=120) }}
+          {% endif %}
+        </p>
+        
+        <div class="card-footer">
+          <span class="read-time">
+            {% if note.reading_time %}
+              {{ note.reading_time }} min lesing
+            {% endif %}
+          </span>
+          <span class="read-link">
+            Les notat
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </span>
+        </div>
+      </a>
+    {% else %}
+      <div class="empty-state" style="display: block;">
+        <p>Det er ingen sider i denne seksjonen enda.</p>
+      </div>
+    {% endfor %}
+    
+    {# --- Dynamic JavaScript Empty State (Hidden by default) --- #}
+    <div class="empty-state" id="empty-state">
+      <p>Fant ingen notater som passer til søket eller temaet...</p>
+    </div>
+  </div>
+</div>
+{% endblock content %}

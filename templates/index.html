@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-section">
+  <h1 class="hero-title">velkommen til <span class="hero-highlight">{{ config.title | lower }}</span><span class="logo-dot">.</span></h1>
+  <p class="hero-subtitle">Et økosystem av notater, artikler og prosjekter bygget bit for bit, inspirert av beverens utrettelige skapertrang.</p>
+</section>
+
+<div class="garden-explorer">
+  {# --- Search Bar --- #}
+  <div class="search-wrapper">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <input type="text" id="garden-search" class="search-input" placeholder="Søk i notater..." aria-label="Søk">
+  </div>
+
+  {# --- Dynamic Garden Grid --- #}
+  <div class="garden-grid" id="garden-grid">
+    {% set garden_section = get_section(path="garden/_index.md") %}
+    {% for note in garden_section.pages %}
+      {% set category = note.extra.category | default(value="generelt") %}
+      
+      <a href="{{ note.permalink | safe }}" class="note-card" 
+         data-title="{{ note.title }}" 
+         data-summary="{{ note.description | default(value=note.summary | default(value="")) }}" 
+         data-tags="{{ note.taxonomies.tags | default(value=[]) | join(sep=", ") }}"
+         data-category="{{ category | lower }}">
+        
+        <div class="card-header">
+          <span class="note-date">{{ note.date | date(format="%d. %b %Y") }}</span>
+          <span class="note-category">#{{ category }}</span>
+        </div>
+        
+        <h2 class="note-title">{{ note.title }}</h2>
+        
+        <p class="note-summary">
+          {% if note.description %}
+            {{ note.description }}
+          {% elif note.summary %}
+            {{ note.summary | striptags }}
+          {% else %}
+            {{ note.content | striptags | truncate(length=120) }}
+          {% endif %}
+        </p>
+        
+        <div class="card-footer">
+          <span class="read-time">
+            {% if note.reading_time %}
+              {{ note.reading_time }} min lesing
+            {% endif %}
+          </span>
+          <span class="read-link">
+            Les notat
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </span>
+        </div>
+      </a>
+    {% else %}
+      <div class="empty-state" style="display: block;">
+        <p>Ingen innlegg tilgjengelig akkurat nå.</p>
+      </div>
+    {% endfor %}
+    
+    {# --- Dynamic JavaScript Empty State (Hidden by default) --- #}
+    <div class="empty-state" id="empty-state">
+      <p>Fant ingen notater som passer til søket eller temaet...</p>
+    </div>
+  </div>
+</div>
+
+<section class="newsletter-section">
+  <h2 class="newsletter-title">abonner på nye notater<span class="logo-dot">.</span></h2>
+  <p class="newsletter-subtitle">Motta de nyeste artiklene og prosjektene direkte i innboksen din. Enkel avmelding, ingen spam.</p>
+  
+  <!-- 
+    KOBLE TIL MAILCHIMP:
+    1. Erstatt 'action'-attributten nedenfor med din egen Mailchimp POST URL.
+       F.eks.: https://dentammebever.us10.list-manage.com/subscribe/post?u=abcdef123&amp;id=456789
+    2. Oppdater 'name'-attributten på honeypot-feltet under for best mulig spam-beskyttelse:
+       Erstatt 'b_din_u_id_din_list_id' med 'b_' etterfulgt av din u-verdi og id-verdi (f.eks. b_abcdef123_456789).
+  -->
+  <form class="newsletter-form" action="https://dentammebever.us10.list-manage.com/subscribe/post?u=din_bruker_id&amp;id=din_liste_id" method="post" target="_blank" novalidate>
+    <input type="email" class="newsletter-input" name="EMAIL" placeholder="din e-postadresse..." aria-label="E-postadresse" required>
+    
+    <!-- Anti-bot honeypot (skjult for vanlige brukere, lurer roboter til å feile registreringen) -->
+    <div style="position: absolute; left: -5000px;" aria-hidden="true">
+      <input type="text" name="b_din_u_id_din_list_id" tabindex="-1" value="">
+    </div>
+    
+    <button type="submit" class="newsletter-btn">meld på</button>
+  </form>
+</section>
+{% endblock content %}
