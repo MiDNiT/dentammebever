@@ -24,8 +24,9 @@ collections:
     create: true
     slug: "{{slug}}"
     # Zola bruker TOML frontmatter (+++ ... +++)
-    format: toml
+    format: "frontmatter"
     extension: md
+
     frontmatter_delimiter: "+++"
     preview_path: "garden/{{slug}}"
     editor:

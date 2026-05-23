@@ -149,6 +149,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowLeft' && backLink && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
       window.location.href = backLink.getAttribute('href');
     }
+
+    // Secret developer shortcut (Alt + Shift + A) to access the admin panel
+    if (e.altKey && e.shiftKey && e.code === 'KeyA') {
+      e.preventDefault();
+      window.location.href = '/admin/';
+    }
   });
 
 
@@ -363,6 +369,12 @@ document.addEventListener('DOMContentLoaded', () => {
       toastTimeout = setTimeout(() => {
         beverToast.classList.remove('show');
       }, 5500);
+    });
+
+    // Secret developer entry: Double click/tap the beaver emoji to navigate to /admin/
+    beverEgg.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      window.location.href = '/admin/';
     });
   }
 
