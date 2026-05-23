@@ -210,211 +210,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- Interactive SVG Graph Visualizer ---
-  const graphContainer = document.getElementById('note-graph-container');
-  if (graphContainer) {
-    const currentTitle = graphContainer.getAttribute('data-current-title') || 'denne siden';
-    const currentUrl = graphContainer.getAttribute('data-current-url') || '#';
-    const backlinksData = graphContainer.getAttribute('data-backlinks');
-    
-    let backlinks = [];
-    try {
-      backlinks = JSON.parse(backlinksData) || [];
-    } catch (err) {
-      console.error('Kunne ikke hente backlinks for grafen:', err);
+  // --- Smart Link Prefetcher for Instant Page Loads ---
+  (function() {
+    const prefetchCache = new Set();
+
+    function prefetchLink(url) {
+      if (!url || prefetchCache.has(url)) return;
+      prefetchCache.add(url);
+
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url;
+      link.as = 'document';
+      document.head.appendChild(link);
     }
 
-    // Prepare graph dataset
-    // Nodes list: center node + home node + backlinks nodes
-    const nodes = [
-      { id: 'current', label: currentTitle, url: currentUrl, isCurrent: true },
-      { id: 'home', label: 'hjem', url: '/', isHome: true }
-    ];
-    
-    backlinks.forEach((link, idx) => {
-      nodes.push({ id: `backlink-${idx}`, label: link.title, url: link.permalink, isBacklink: true });
-    });
+    document.addEventListener('pointerover', function(e) {
+      const anchor = e.target.closest('a');
+      if (!anchor) return;
 
-    const links = [
-      { source: 'home', target: 'current' }
-    ];
-    
-    backlinks.forEach((link, idx) => {
-      links.push({ source: `backlink-${idx}`, target: 'current' });
-    });
-
-    // SVG Layout calculations
-    const width = graphContainer.clientWidth || 600;
-    const height = graphContainer.clientHeight || 250;
-    const centerX = width / 2;
-    const centerY = height / 2;
-
-    // Radius varies slightly with screen size to prevent clutter
-    const radius = Math.min(width, height) * (width < 500 ? 0.28 : 0.32);
-
-    // Position nodes
-    nodes[0].x = centerX;
-    nodes[0].y = centerY;
-
-    const neighborCount = nodes.length - 1;
-    for (let i = 1; i < nodes.length; i++) {
-      const angle = ((i - 1) / neighborCount) * 2 * Math.PI - Math.PI / 2;
-      nodes[i].x = centerX + radius * Math.cos(angle);
-      nodes[i].y = centerY + radius * Math.sin(angle);
-      nodes[i].angle = angle;
-    }
-
-    // Create SVG string
-    let svgContent = `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">`;
-
-    // 1. Draw link lines first (behind nodes)
-    links.forEach(link => {
-      const sourceNode = nodes.find(n => n.id === link.source);
-      const targetNode = nodes.find(n => n.id === link.target);
-      if (sourceNode && targetNode) {
-        svgContent += `<line x1="${sourceNode.x}" y1="${sourceNode.y}" x2="${targetNode.x}" y2="${targetNode.y}" class="graph-link" id="link-${link.source}"/>`;
+      const href = anchor.getAttribute('href');
+      // Prefetch local articles but skip external urls or the CMS administrative pages
+      if (href && href.startsWith('/garden/') && !href.includes('/admin/')) {
+        prefetchLink(href);
       }
     });
 
-    // 2. Draw nodes and text labels
-    nodes.forEach(node => {
-      const isCurrent = node.isCurrent;
-      const r = isCurrent ? 8 : 5;
-      const nodeClass = isCurrent ? 'graph-node current' : 'graph-node neighbor';
+    document.addEventListener('touchstart', function(e) {
+      const anchor = e.target.closest('a');
+      if (!anchor) return;
 
-      // Compute radial text offsets to prevent overlaps!
-      let textX = node.x;
-      let textY = node.y;
-      let anchor = 'middle';
-
-      if (isCurrent) {
-        textY = node.y + r + 13;
-      } else {
-        const angle = node.angle;
-        const labelOffset = 13;
-        textX = node.x + labelOffset * Math.cos(angle);
-        textY = node.y + labelOffset * Math.sin(angle) + 4; // slight vertical centering alignment
-
-        if (Math.cos(angle) > 0.1) {
-          anchor = 'start';
-        } else if (Math.cos(angle) < -0.1) {
-          anchor = 'end';
-        }
+      const href = anchor.getAttribute('href');
+      if (href && href.startsWith('/garden/') && !href.includes('/admin/')) {
+        prefetchLink(href);
       }
-
-      svgContent += `
-        <a href="${node.url}" class="graph-node-link">
-          <g class="graph-node-group" data-node-id="${node.id}">
-            <circle cx="${node.x}" cy="${node.y}" r="${r}" class="${nodeClass}"/>
-            <text x="${textX}" y="${textY}" text-anchor="${anchor}" class="graph-label">${node.label}</text>
-          </g>
-        </a>
-      `;
-    });
-
-    svgContent += `</svg>`;
-    graphContainer.innerHTML = svgContent;
-
-    // Attach premium interactive hover listeners for visual dimming
-    const svgElement = graphContainer.querySelector('svg');
-    if (svgElement) {
-      const groups = svgElement.querySelectorAll('.graph-node-group');
-      groups.forEach(group => {
-        const nodeId = group.getAttribute('data-node-id');
-        
-        group.addEventListener('mouseenter', () => {
-          // Dim all node groups and lines
-          groups.forEach(g => g.classList.add('dimmed'));
-          svgElement.querySelectorAll('.graph-link').forEach(l => l.classList.add('dimmed'));
-          
-          // Highlight active group
-          group.classList.remove('dimmed');
-          group.classList.add('active');
-          
-          // Highlight active link line
-          const activeLink = svgElement.querySelector(`#link-${nodeId}`);
-          if (activeLink) {
-            activeLink.classList.remove('dimmed');
-            activeLink.classList.add('active');
-          }
-        });
-
-        group.addEventListener('mouseleave', () => {
-          // Reset all
-          groups.forEach(g => {
-            g.classList.remove('dimmed');
-            g.classList.remove('active');
-          });
-          svgElement.querySelectorAll('.graph-link').forEach(l => {
-            l.classList.remove('dimmed');
-            l.classList.remove('active');
-          });
-        });
-      });
-    }
-
-    // Handle window resizing
-    window.addEventListener('resize', () => {
-      const newWidth = graphContainer.clientWidth;
-      const newHeight = graphContainer.clientHeight;
-      const newCenterX = newWidth / 2;
-      const newCenterY = newHeight / 2;
-      const newRadius = Math.min(newWidth, newHeight) * (newWidth < 500 ? 0.28 : 0.32);
-
-      const activeSvg = graphContainer.querySelector('svg');
-      if (activeSvg) {
-        activeSvg.setAttribute('viewBox', `0 0 ${newWidth} ${newHeight}`);
-        
-        // Recalculate node coordinates
-        nodes[0].x = newCenterX;
-        nodes[0].y = newCenterY;
-        for (let i = 1; i < nodes.length; i++) {
-          const angle = ((i - 1) / neighborCount) * 2 * Math.PI - Math.PI / 2;
-          nodes[i].x = newCenterX + newRadius * Math.cos(angle);
-          nodes[i].y = newCenterY + newRadius * Math.sin(angle);
-        }
-
-        // Update link lines
-        links.forEach(link => {
-          const line = activeSvg.querySelector(`#link-${link.source}`);
-          const sourceNode = nodes.find(n => n.id === link.source);
-          const targetNode = nodes.find(n => n.id === link.target);
-          if (line && sourceNode && targetNode) {
-            line.setAttribute('x1', sourceNode.x);
-            line.setAttribute('y1', sourceNode.y);
-            line.setAttribute('x2', targetNode.x);
-            line.setAttribute('y2', targetNode.y);
-          }
-        });
-
-        // Update node circle and label placements
-        const svgGroups = activeSvg.querySelectorAll('.graph-node-group');
-        svgGroups.forEach((g, idx) => {
-          const node = nodes[idx];
-          const circle = g.querySelector('circle');
-          const text = g.querySelector('text');
-          
-          if (circle && text && node) {
-            circle.setAttribute('cx', node.x);
-            circle.setAttribute('cy', node.y);
-
-            let tX = node.x;
-            let tY = node.y;
-            if (node.isCurrent) {
-              tY = node.y + (circle.getAttribute('r') || 8) + 13;
-            } else {
-              const angle = node.angle;
-              const labelOffset = 13;
-              tX = node.x + labelOffset * Math.cos(angle);
-              tY = node.y + labelOffset * Math.sin(angle) + 4;
-            }
-            text.setAttribute('x', tX);
-            text.setAttribute('y', tY);
-          }
-        });
-      }
-    });
-  }
+    }, { passive: true });
+  })();
 
   // --- Code Copy Buttons ---
   const codeBlocks = document.querySelectorAll('pre');
@@ -521,6 +352,48 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Service Worker Registration for offline support ---
+  // --- Newsletter Ajax handling (inline thank‑you) ---
+  (function() {
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (!newsletterForm) return;
+
+    newsletterForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const iframeName = 'mailchimp-iframe-' + Date.now();
+      const iframe = document.createElement('iframe');
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      const originalTarget = newsletterForm.getAttribute('target');
+      newsletterForm.setAttribute('target', iframeName);
+      newsletterForm.submit();
+      newsletterForm.setAttribute('target', originalTarget || '_blank');
+
+      iframe.addEventListener('load', function () {
+        // Remove any existing thank‑you message
+        const existing = newsletterForm.parentNode.querySelector('.newsletter-msg');
+        if (existing) existing.remove();
+
+        // Create fresh element to re‑trigger CSS animation
+        const thankMsg = document.createElement('p');
+        thankMsg.className = 'newsletter-msg';
+        thankMsg.textContent = 'Takk for påmeldingen — du hører fra oss snart.';
+        newsletterForm.parentNode.insertBefore(thankMsg, newsletterForm.nextSibling);
+
+        newsletterForm.reset();
+
+        setTimeout(() => {
+          thankMsg.style.transition = 'opacity 0.4s ease';
+          thankMsg.style.opacity = '0';
+          setTimeout(() => thankMsg.remove(), 400);
+        }, 4000);
+
+        iframe.remove();
+      });
+    });
+  })();
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')

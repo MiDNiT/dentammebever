@@ -61,16 +61,7 @@
   </footer>
   {% endif %}
 
-  {# --- Interactive Local Graph View --- #}
-  <div class="note-graph-wrapper">
-    <h3 class="graph-title">relasjonskart<span class="logo-dot">.</span></h3>
-    <div id="note-graph-container" 
-         data-current-title="{{ page.title | lower }}" 
-         data-current-url="{{ page.path | safe }}"
-         data-backlinks="{% if page.backlinks | length > 0 %}[{% for link in page.backlinks %}{&quot;title&quot;: &quot;{{ link.title | lower }}&quot;, &quot;permalink&quot;: &quot;{{ link.permalink | replace(from=config.base_url, to="") | safe }}&quot;}{% if not loop.last %}, {% endif %}{% endfor %}]{% else %}[]{% endif %}">
-      <!-- SVG dynamic canvas rendered by JS -->
-    </div>
-  </div>
+
 
 </article>
 {% endblock content %}
