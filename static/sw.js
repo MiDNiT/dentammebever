@@ -9,8 +9,11 @@ const PRE_CACHE_ASSETS = [
   '/',
   '/css/style.css',
   '/js/main.js',
-  '/404.html'
+  '/404.html',
+  '/offline/',
+  '/offline/index.html'
 ];
+
 
 // Install event - Pre-cache core layouts
 self.addEventListener('install', e => {
@@ -63,11 +66,12 @@ self.addEventListener('fetch', e => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          // If offline and request is HTML, we can return the cached root or 404 page
+          // If offline and request is HTML, we can return the cached offline guide page
           if (e.request.headers.get('accept').includes('text/html')) {
-            return caches.match('/404.html');
+            return caches.match('/offline/');
           }
         });
       })
   );
 });
+

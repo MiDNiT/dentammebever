@@ -10,12 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      let newTheme = 'light';
+      
+      if (currentTheme === 'light') {
+        newTheme = 'sepia';
+      } else if (currentTheme === 'sepia') {
+        newTheme = 'dark';
+      } else {
+        newTheme = 'light';
+      }
       
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
   }
+
 
   // --- Mobile Menu Navigation ---
   const mobileToggle = document.getElementById('mobile-toggle');
@@ -421,7 +430,68 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   })();
+
+  // --- Dynamic Offline Cache Indexer ---
+  (function() {
+    const offlineList = document.getElementById('offline-links');
+    if (!offlineList) return;
+
+    if (!('caches' in window)) {
+      offlineList.innerHTML = '<li class="offline-error">Nettleseren din støtter ikke offline-caching.</li>';
+      return;
+    }
+
+    caches.open('bever-cache-v1').then(cache => {
+      cache.keys().then(requests => {
+        const articleRequests = requests.filter(req => {
+          const url = new URL(req.url);
+          // Only show garden notes and avoid directories
+          return url.pathname.startsWith('/garden/') && 
+                 url.pathname !== '/garden/' && 
+                 url.pathname !== '/garden';
+        });
+
+        if (articleRequests.length === 0) {
+          offlineList.innerHTML = '<li class="offline-empty">Du har ingen lagrede notater på denne enheten ennå. Gå online og utforsk noen notater først! 🍂</li>';
+          return;
+        }
+
+        offlineList.innerHTML = ''; // Clear loading status
+
+        articleRequests.forEach(req => {
+          const url = new URL(req.url);
+          
+          // Fetch from the cache to extract the real article title!
+          cache.match(req).then(response => {
+            if (!response) return;
+            response.text().then(htmlText => {
+              // Extract page title using a simple regex (fast and CSP-safe!)
+              const titleMatch = htmlText.match(/<title>([^<]+)<\/title>/i);
+              let title = titleMatch ? titleMatch[1] : url.pathname;
+              
+              // Strip site name suffix from title if present (e.g. "Title | Den Tamme Bever")
+              title = title.split(' | ')[0];
+
+              const li = document.createElement('li');
+              li.className = 'offline-link-item';
+              li.innerHTML = `
+                <a href="${url.pathname}" class="offline-article-link">
+                  <span class="offline-icon">📄</span>
+                  <span class="offline-title">${title.toLowerCase()}</span>
+                </a>
+              `;
+              offlineList.appendChild(li);
+            });
+          });
+        });
+      });
+    }).catch(err => {
+      offlineList.innerHTML = `<li class="offline-error">Kunne ikke hente lagrede sider: ${err.message}</li>`;
+    });
+  })();
+
   if ('serviceWorker' in navigator) {
+
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
         .then(() => console.log('sw.js registrert.'))
