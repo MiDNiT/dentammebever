@@ -56,7 +56,7 @@
   <footer class="backlinks-section">
     <span class="backlinks-label">referert fra:</span>
     {% for link in page.backlinks %}
-      <a href="{{ link.path | safe }}" class="backlink-inline">{{ link.title | lower }}</a>{% if not loop.last %}, {% endif %}
+      <a href="{{ link.permalink | replace(from=config.base_url, to="") | safe }}" class="backlink-inline">{{ link.title | lower }}</a>{% if not loop.last %}, {% endif %}
     {% endfor %}
   </footer>
   {% endif %}
@@ -67,7 +67,7 @@
     <div id="note-graph-container" 
          data-current-title="{{ page.title | lower }}" 
          data-current-url="{{ page.path | safe }}"
-         data-backlinks="{% if page.backlinks | length > 0 %}[{% for link in page.backlinks %}{&quot;title&quot;: &quot;{{ link.title | lower }}&quot;, &quot;permalink&quot;: &quot;{{ link.path | safe }}&quot;}{% if not loop.last %}, {% endif %}{% endfor %}]{% else %}[]{% endif %}">
+         data-backlinks="{% if page.backlinks | length > 0 %}[{% for link in page.backlinks %}{&quot;title&quot;: &quot;{{ link.title | lower }}&quot;, &quot;permalink&quot;: &quot;{{ link.permalink | replace(from=config.base_url, to="") | safe }}&quot;}{% if not loop.last %}, {% endif %}{% endfor %}]{% else %}[]{% endif %}">
       <!-- SVG dynamic canvas rendered by JS -->
     </div>
   </div>
