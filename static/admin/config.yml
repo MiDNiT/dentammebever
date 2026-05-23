@@ -2,9 +2,9 @@ backend:
   name: github
   repo: MiDNiT/dentammebever
   branch: main
-  # Cloudflare Pages sin innebygde OAuth-proxy
+  # Vår egen Cloudflare Pages Function håndterer OAuth
   base_url: https://dentammebever.no
-  auth_endpoint: /cdn-cgi/pages/oauth/callback
+  auth_endpoint: /api/auth
 
 # Publiseringsflyt: Draft → In Review → Ready → Published
 publish_mode: editorial_workflow
