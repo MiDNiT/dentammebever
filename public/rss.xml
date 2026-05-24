@@ -31,25 +31,6 @@
 </description>
       </item>
       <item>
-          <title>Du er offline</title>
-          <pubDate>Sat, 23 May 2026 00:00:00 +0000</pubDate>
-          <author>Unknown</author>
-          <link>https://dentammebever.no/offline/</link>
-          <guid>https://dentammebever.no/offline/</guid>
-          <description xml:base="https://dentammebever.no/offline/">&lt;p&gt;Akkurat nå har du mistet tilkoblingen til internett. Men fortvil ikke! Beveren 🦫 har jobbet iherdig i bakgrunnen og lagret de delene av hagen du allerede har besøkt.&lt;&#x2F;p&gt;
-&lt;p&gt;Under finner du en oversikt over alle notatene som ligger lagret lokalt på enheten din, og som du kan &lt;strong&gt;lese akkurat nå&lt;&#x2F;strong&gt; helt uten internett:&lt;&#x2F;p&gt;
-&lt;hr &#x2F;&gt;
-&lt;div class=&quot;offline-explorer&quot;&gt;
-  &lt;ul id=&quot;offline-links&quot; class=&quot;offline-links-list&quot;&gt;
-    &lt;li class=&quot;offline-status&quot;&gt;Søker etter lagrede notater på enheten din...&lt;&#x2F;li&gt;
-  &lt;&#x2F;ul&gt;
-&lt;&#x2F;div&gt;
-&lt;hr &#x2F;&gt;
-&lt;h3 id=&quot;hvorfor-er-notater-tilgjengelig-offline&quot;&gt;Hvorfor er notater tilgjengelig offline?&lt;&#x2F;h3&gt;
-&lt;p&gt;Nettstedet bruker en moderne teknologi kalt &lt;strong&gt;Service Worker&lt;&#x2F;strong&gt;. Når du leser et notat med internett tilkoblet, lagrer nettleseren din automatisk en lett kopi på enheten din. Neste gang du mister dekning (for eksempel på toget eller på hytta), sørger beveren for at disse notatene hentes direkte fra maskinen din på et blunk!&lt;&#x2F;p&gt;
-</description>
-      </item>
-      <item>
           <title>Personvern og informasjonskapsler</title>
           <pubDate>Sat, 23 May 2026 00:00:00 +0000</pubDate>
           <author>Unknown</author>
