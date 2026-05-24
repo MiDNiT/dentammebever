@@ -501,29 +501,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!searchModal || !searchInput || !searchResults) return;
 
     let indexLoaded = false;
-    let elasticIndex = null;
     let activeResultIdx = -1;
 
-    // Initialize preloaded search engine from static script tags
+    // Initialize preloaded search index
     function loadSearchEngine(callback) {
       if (indexLoaded) {
         if (callback) callback();
         return;
       }
 
-      if (window.elasticlunr && window.searchIndex) {
-        elasticIndex = elasticlunr.Index.load(window.searchIndex);
+      if (window.searchIndex) {
         indexLoaded = true;
         if (callback) callback();
       } else {
-        // Fallback: If not fully parsed yet, wait 300ms and retry once
+        // Fallback: If searchIndex is not parsed yet, wait 300ms and retry
         setTimeout(() => {
-          if (window.elasticlunr && window.searchIndex) {
-            elasticIndex = elasticlunr.Index.load(window.searchIndex);
+          if (window.searchIndex) {
             indexLoaded = true;
             if (callback) callback();
           } else {
-            searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Søkeindeksen klargjøres fortsatt. Vennligst vent et øyeblikk og prøv igjen.</li>';
+            searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Søkeindeksen klargjøres fortsatt. Prøv igjen om et øyeblikk.</li>';
           }
         }, 300);
       }
@@ -534,7 +531,7 @@ document.addEventListener('DOMContentLoaded', () => {
       searchModal.setAttribute('aria-hidden', 'false');
       loadSearchEngine(() => {
         searchInput.focus();
-        performSearch(); // Perform search on empty query/previous query
+        performSearch();
       });
     }
 
@@ -556,7 +553,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Keyboard trigger bindings (CMD+K, Ctrl+K, /, Esc)
     document.addEventListener('keydown', (e) => {
-      // CMD+K or Ctrl+K
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         if (searchModal.classList.contains('open')) {
@@ -566,7 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Slash key '/' (only when not typing in form inputs)
       if (e.key === '/' && !searchModal.classList.contains('open') &&
           document.activeElement.tagName !== 'INPUT' && 
           document.activeElement.tagName !== 'TEXTAREA') {
@@ -574,7 +569,6 @@ document.addEventListener('DOMContentLoaded', () => {
         openSearch();
       }
 
-      // Esc to close
       if (e.key === 'Escape' && searchModal.classList.contains('open')) {
         closeSearch();
       }
@@ -615,8 +609,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     searchInput.addEventListener('input', performSearch);
 
+    // Custom Vanilla JavaScript search scanner
     function performSearch() {
-      if (!indexLoaded || !elasticIndex) return;
+      if (!indexLoaded || !window.searchIndex || !window.searchIndex.documentStore || !window.searchIndex.documentStore.docs) {
+        return;
+      }
 
       const query = searchInput.value.trim().toLowerCase();
       activeResultIdx = -1;
@@ -626,43 +623,57 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const rawResults = elasticIndex.search(query, {
-        fields: {
-          title: { boost: 3 },
-          description: { boost: 2 },
-          body: { boost: 1 }
-        },
-        bool: "OR",
-        expand: true
-      });
+      const docs = window.searchIndex.documentStore.docs;
+      const results = [];
 
-      if (rawResults.length === 0) {
+      for (let url in docs) {
+        const doc = docs[url];
+        const title = doc.title || '';
+        const body = doc.body || '';
+        const desc = doc.description || '';
+
+        const titleMatch = title.toLowerCase().includes(query);
+        const bodyMatch = body.toLowerCase().includes(query);
+        const descMatch = desc.toLowerCase().includes(query);
+
+        if (titleMatch || bodyMatch || descMatch) {
+          let score = 0;
+          if (titleMatch) score += 10;
+          if (descMatch) score += 5;
+          if (bodyMatch) score += 1;
+
+          results.push({
+            url: url,
+            title: title,
+            body: body,
+            description: desc,
+            score: score
+          });
+        }
+      }
+
+      results.sort((a, b) => b.score - a.score);
+
+      if (results.length === 0) {
         searchResults.innerHTML = '<li class="search-status-item">Ingen treff matcher søket ditt...</li>';
         return;
       }
 
-      searchResults.innerHTML = ''; // Clear status
+      searchResults.innerHTML = '';
 
-      rawResults.forEach((res) => {
-        const doc = elasticIndex.documentStore.getDoc(res.ref);
-        if (!doc) return;
-
-        // Strip absolute url prefixes to support relative URLs perfectly
-        const relativeUrl = doc.id.replace(window.location.origin, "").replace("https://dentammebever.no", "");
+      results.forEach((res) => {
+        const relativeUrl = res.url.replace(window.location.origin, "").replace("https://dentammebever.no", "");
         
         const li = document.createElement('li');
         li.className = 'search-result-item';
 
-        // Extract category (Zola standard structure or falls back to garden/general)
         let category = 'generelt';
         if (relativeUrl.includes('/garden/')) {
           category = 'hagenotat';
         }
 
-        // Highlight matching terms in excerpt
-        let excerpt = doc.description || doc.body || '';
+        let excerpt = res.description || res.body || '';
         if (excerpt.length > 140) {
-          // Find search term position in body to center excerpt around it!
           const queryIdx = excerpt.toLowerCase().indexOf(query);
           if (queryIdx > 60) {
             excerpt = '...' + excerpt.substring(queryIdx - 50, queryIdx + 90) + '...';
@@ -671,11 +682,10 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
 
-        // Safe highlight replace
         const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
         const highlightRegex = new RegExp(`(${escapedQuery})`, 'gi');
         const highlightedExcerpt = excerpt.replace(highlightRegex, '<mark>$1</mark>');
-        const highlightedTitle = doc.title.replace(highlightRegex, '<mark>$1</mark>');
+        const highlightedTitle = res.title.replace(highlightRegex, '<mark>$1</mark>');
 
         li.innerHTML = `
           <a href="${relativeUrl}" class="search-result-link">
@@ -691,6 +701,78 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   })();
+
+  // --- Dynamic Recommended Articles ("Neste lesning") ---
+  (function() {
+    const articleContainer = document.querySelector('.note-view-container');
+    if (!articleContainer) return;
+
+    function initRecommendations() {
+      if (!window.searchIndex || !window.searchIndex.documentStore || !window.searchIndex.documentStore.docs) {
+        // Retry in 300ms if searchIndex is not ready yet
+        setTimeout(initRecommendations, 300);
+        return;
+      }
+
+      const docs = window.searchIndex.documentStore.docs;
+      const currentPath = window.location.pathname;
+      const candidates = [];
+
+      for (let url in docs) {
+        const doc = docs[url];
+        const relativeUrl = url.replace(window.location.origin, "").replace("https://dentammebever.no", "");
+        
+        // Exclude current page and non-garden files (like privacy page or index)
+        if (relativeUrl === currentPath || !relativeUrl.includes('/garden/') || relativeUrl.endsWith('_index.md') || relativeUrl === '/garden/') {
+          continue;
+        }
+
+        candidates.push({
+          url: relativeUrl,
+          title: doc.title,
+          description: doc.description || doc.body.substring(0, 100) + '...',
+          body: doc.body
+        });
+      }
+
+      if (candidates.length === 0) return;
+
+      // Select 2 random hagenotats
+      const selected = [];
+      const shuffled = candidates.sort(() => 0.5 - Math.random());
+      selected.push(...shuffled.slice(0, Math.min(2, shuffled.length)));
+
+      // Render the recommendations section
+      const recSection = document.createElement('section');
+      recSection.className = 'recommendations-section glass';
+      
+      let cardsHtml = '';
+      selected.forEach(post => {
+        cardsHtml += `
+          <a href="${post.url}" class="note-card">
+            <div class="card-header">
+              <span class="note-category">#hagenotat</span>
+            </div>
+            <h3 class="note-title" style="font-size: 1.15rem; margin-top: 8px; margin-bottom: 6px;">${post.title}</h3>
+            <p class="note-summary" style="font-size: 0.9rem; opacity: 0.85;">${post.description.substring(0, 100)}...</p>
+          </a>
+        `;
+      });
+
+      recSection.innerHTML = `
+        <h3 class="recommendations-title" style="font-size: 1.3rem; font-weight: 700; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
+          <span>🌱</span> Neste lesning i hagen
+        </h3>
+        <div class="recommendations-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+          ${cardsHtml}
+        </div>
+      `;
+
+      articleContainer.appendChild(recSection);
+    }
+
+    // Initialize recommendation list on load
+    window.addEventListener('load', initRecommendations);
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
