@@ -1,4 +1,8 @@
+# Robots.txt for Den Tamme Bever
+# Tillater alle søkemotorer å indeksere nettstedet
+
 User-agent: *
-Disallow:
 Allow: /
+
+# Peker direkte på sitemap for raskere indeksering i Google
 Sitemap: https://dentammebever.no/sitemap.xml

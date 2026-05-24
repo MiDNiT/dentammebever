@@ -10,12 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
   if (themeBtn) {
     themeBtn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      let newTheme = 'light';
+      
+      if (currentTheme === 'light') {
+        newTheme = 'sepia';
+      } else if (currentTheme === 'sepia') {
+        newTheme = 'dark';
+      } else {
+        newTheme = 'light';
+      }
       
       document.documentElement.setAttribute('data-theme', newTheme);
       localStorage.setItem('theme', newTheme);
     });
   }
+
 
   // --- Mobile Menu Navigation ---
   const mobileToggle = document.getElementById('mobile-toggle');
@@ -149,6 +158,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowLeft' && backLink && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
       window.location.href = backLink.getAttribute('href');
     }
+
+    // Secret developer shortcut (Alt + Shift + A) to access the admin panel
+    if (e.altKey && e.shiftKey && e.code === 'KeyA') {
+      e.preventDefault();
+      window.location.href = '/admin/';
+    }
   });
 
 
@@ -210,211 +225,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // --- Interactive SVG Graph Visualizer ---
-  const graphContainer = document.getElementById('note-graph-container');
-  if (graphContainer) {
-    const currentTitle = graphContainer.getAttribute('data-current-title') || 'denne siden';
-    const currentUrl = graphContainer.getAttribute('data-current-url') || '#';
-    const backlinksData = graphContainer.getAttribute('data-backlinks');
-    
-    let backlinks = [];
-    try {
-      backlinks = JSON.parse(backlinksData) || [];
-    } catch (err) {
-      console.error('Kunne ikke hente backlinks for grafen:', err);
+  // --- Intelligent Page-Wide Prefetcher for Instant Load Times ---
+  (function() {
+    const prefetchCache = new Set();
+
+    function prefetchLink(url) {
+      if (!url || prefetchCache.has(url)) return;
+      prefetchCache.add(url);
+
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = url;
+      link.as = 'document';
+      document.head.appendChild(link);
     }
 
-    // Prepare graph dataset
-    // Nodes list: center node + home node + backlinks nodes
-    const nodes = [
-      { id: 'current', label: currentTitle, url: currentUrl, isCurrent: true },
-      { id: 'home', label: 'hjem', url: '/', isHome: true }
-    ];
-    
-    backlinks.forEach((link, idx) => {
-      nodes.push({ id: `backlink-${idx}`, label: link.title, url: link.permalink, isBacklink: true });
+    // 1. Bulk prefetch all article links on the page once the site is fully loaded and idle
+    window.addEventListener('load', () => {
+      // Small delay (200ms) to ensure everything else has settled first
+      setTimeout(() => {
+        const articleLinks = document.querySelectorAll('a[href^="/garden/"]');
+        articleLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          if (href && !href.includes('/admin/')) {
+            prefetchLink(href);
+          }
+        });
+      }, 200);
     });
 
-    const links = [
-      { source: 'home', target: 'current' }
-    ];
-    
-    backlinks.forEach((link, idx) => {
-      links.push({ source: `backlink-${idx}`, target: 'current' });
-    });
+    // 2. Fallback hover/touch listener for dynamically loaded links or other sections
+    document.addEventListener('pointerover', function(e) {
+      const anchor = e.target.closest('a');
+      if (!anchor) return;
 
-    // SVG Layout calculations
-    const width = graphContainer.clientWidth || 600;
-    const height = graphContainer.clientHeight || 250;
-    const centerX = width / 2;
-    const centerY = height / 2;
-
-    // Radius varies slightly with screen size to prevent clutter
-    const radius = Math.min(width, height) * (width < 500 ? 0.28 : 0.32);
-
-    // Position nodes
-    nodes[0].x = centerX;
-    nodes[0].y = centerY;
-
-    const neighborCount = nodes.length - 1;
-    for (let i = 1; i < nodes.length; i++) {
-      const angle = ((i - 1) / neighborCount) * 2 * Math.PI - Math.PI / 2;
-      nodes[i].x = centerX + radius * Math.cos(angle);
-      nodes[i].y = centerY + radius * Math.sin(angle);
-      nodes[i].angle = angle;
-    }
-
-    // Create SVG string
-    let svgContent = `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}" xmlns="http://www.w3.org/2000/svg">`;
-
-    // 1. Draw link lines first (behind nodes)
-    links.forEach(link => {
-      const sourceNode = nodes.find(n => n.id === link.source);
-      const targetNode = nodes.find(n => n.id === link.target);
-      if (sourceNode && targetNode) {
-        svgContent += `<line x1="${sourceNode.x}" y1="${sourceNode.y}" x2="${targetNode.x}" y2="${targetNode.y}" class="graph-link" id="link-${link.source}"/>`;
+      const href = anchor.getAttribute('href');
+      if (href && href.startsWith('/garden/') && !href.includes('/admin/')) {
+        prefetchLink(href);
       }
     });
 
-    // 2. Draw nodes and text labels
-    nodes.forEach(node => {
-      const isCurrent = node.isCurrent;
-      const r = isCurrent ? 8 : 5;
-      const nodeClass = isCurrent ? 'graph-node current' : 'graph-node neighbor';
+    document.addEventListener('touchstart', function(e) {
+      const anchor = e.target.closest('a');
+      if (!anchor) return;
 
-      // Compute radial text offsets to prevent overlaps!
-      let textX = node.x;
-      let textY = node.y;
-      let anchor = 'middle';
-
-      if (isCurrent) {
-        textY = node.y + r + 13;
-      } else {
-        const angle = node.angle;
-        const labelOffset = 13;
-        textX = node.x + labelOffset * Math.cos(angle);
-        textY = node.y + labelOffset * Math.sin(angle) + 4; // slight vertical centering alignment
-
-        if (Math.cos(angle) > 0.1) {
-          anchor = 'start';
-        } else if (Math.cos(angle) < -0.1) {
-          anchor = 'end';
-        }
+      const href = anchor.getAttribute('href');
+      if (href && href.startsWith('/garden/') && !href.includes('/admin/')) {
+        prefetchLink(href);
       }
+    }, { passive: true });
+  })();
 
-      svgContent += `
-        <a href="${node.url}" class="graph-node-link">
-          <g class="graph-node-group" data-node-id="${node.id}">
-            <circle cx="${node.x}" cy="${node.y}" r="${r}" class="${nodeClass}"/>
-            <text x="${textX}" y="${textY}" text-anchor="${anchor}" class="graph-label">${node.label}</text>
-          </g>
-        </a>
-      `;
-    });
-
-    svgContent += `</svg>`;
-    graphContainer.innerHTML = svgContent;
-
-    // Attach premium interactive hover listeners for visual dimming
-    const svgElement = graphContainer.querySelector('svg');
-    if (svgElement) {
-      const groups = svgElement.querySelectorAll('.graph-node-group');
-      groups.forEach(group => {
-        const nodeId = group.getAttribute('data-node-id');
-        
-        group.addEventListener('mouseenter', () => {
-          // Dim all node groups and lines
-          groups.forEach(g => g.classList.add('dimmed'));
-          svgElement.querySelectorAll('.graph-link').forEach(l => l.classList.add('dimmed'));
-          
-          // Highlight active group
-          group.classList.remove('dimmed');
-          group.classList.add('active');
-          
-          // Highlight active link line
-          const activeLink = svgElement.querySelector(`#link-${nodeId}`);
-          if (activeLink) {
-            activeLink.classList.remove('dimmed');
-            activeLink.classList.add('active');
-          }
-        });
-
-        group.addEventListener('mouseleave', () => {
-          // Reset all
-          groups.forEach(g => {
-            g.classList.remove('dimmed');
-            g.classList.remove('active');
-          });
-          svgElement.querySelectorAll('.graph-link').forEach(l => {
-            l.classList.remove('dimmed');
-            l.classList.remove('active');
-          });
-        });
-      });
-    }
-
-    // Handle window resizing
-    window.addEventListener('resize', () => {
-      const newWidth = graphContainer.clientWidth;
-      const newHeight = graphContainer.clientHeight;
-      const newCenterX = newWidth / 2;
-      const newCenterY = newHeight / 2;
-      const newRadius = Math.min(newWidth, newHeight) * (newWidth < 500 ? 0.28 : 0.32);
-
-      const activeSvg = graphContainer.querySelector('svg');
-      if (activeSvg) {
-        activeSvg.setAttribute('viewBox', `0 0 ${newWidth} ${newHeight}`);
-        
-        // Recalculate node coordinates
-        nodes[0].x = newCenterX;
-        nodes[0].y = newCenterY;
-        for (let i = 1; i < nodes.length; i++) {
-          const angle = ((i - 1) / neighborCount) * 2 * Math.PI - Math.PI / 2;
-          nodes[i].x = newCenterX + newRadius * Math.cos(angle);
-          nodes[i].y = newCenterY + newRadius * Math.sin(angle);
-        }
-
-        // Update link lines
-        links.forEach(link => {
-          const line = activeSvg.querySelector(`#link-${link.source}`);
-          const sourceNode = nodes.find(n => n.id === link.source);
-          const targetNode = nodes.find(n => n.id === link.target);
-          if (line && sourceNode && targetNode) {
-            line.setAttribute('x1', sourceNode.x);
-            line.setAttribute('y1', sourceNode.y);
-            line.setAttribute('x2', targetNode.x);
-            line.setAttribute('y2', targetNode.y);
-          }
-        });
-
-        // Update node circle and label placements
-        const svgGroups = activeSvg.querySelectorAll('.graph-node-group');
-        svgGroups.forEach((g, idx) => {
-          const node = nodes[idx];
-          const circle = g.querySelector('circle');
-          const text = g.querySelector('text');
-          
-          if (circle && text && node) {
-            circle.setAttribute('cx', node.x);
-            circle.setAttribute('cy', node.y);
-
-            let tX = node.x;
-            let tY = node.y;
-            if (node.isCurrent) {
-              tY = node.y + (circle.getAttribute('r') || 8) + 13;
-            } else {
-              const angle = node.angle;
-              const labelOffset = 13;
-              tX = node.x + labelOffset * Math.cos(angle);
-              tY = node.y + labelOffset * Math.sin(angle) + 4;
-            }
-            text.setAttribute('x', tX);
-            text.setAttribute('y', tY);
-          }
-        });
-      }
-    });
-  }
 
   // --- Code Copy Buttons ---
   const codeBlocks = document.querySelectorAll('pre');
@@ -518,10 +379,334 @@ document.addEventListener('DOMContentLoaded', () => {
         beverToast.classList.remove('show');
       }, 5500);
     });
+
+    // Secret developer entry: Double click/tap the beaver emoji to navigate to /admin/
+    beverEgg.addEventListener('dblclick', (e) => {
+      e.preventDefault();
+      window.location.href = '/admin/';
+    });
   }
 
   // --- Service Worker Registration for offline support ---
+  // --- Newsletter Ajax handling (inline thank‑you) ---
+  (function() {
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (!newsletterForm) return;
+
+    newsletterForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const iframeName = 'mailchimp-iframe-' + Date.now();
+      const iframe = document.createElement('iframe');
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      const originalTarget = newsletterForm.getAttribute('target');
+      newsletterForm.setAttribute('target', iframeName);
+      newsletterForm.submit();
+      newsletterForm.setAttribute('target', originalTarget || '_blank');
+
+      iframe.addEventListener('load', function () {
+        // Remove any existing thank‑you message
+        const existing = newsletterForm.parentNode.querySelector('.newsletter-msg');
+        if (existing) existing.remove();
+
+        // Create fresh element to re‑trigger CSS animation
+        const thankMsg = document.createElement('p');
+        thankMsg.className = 'newsletter-msg';
+        thankMsg.textContent = 'Takk for påmeldingen — du hører fra oss snart.';
+        newsletterForm.parentNode.insertBefore(thankMsg, newsletterForm.nextSibling);
+
+        newsletterForm.reset();
+
+        setTimeout(() => {
+          thankMsg.style.transition = 'opacity 0.4s ease';
+          thankMsg.style.opacity = '0';
+          setTimeout(() => thankMsg.remove(), 400);
+        }, 4000);
+
+        iframe.remove();
+      });
+    });
+  })();
+
+  // --- Dynamic Offline Cache Indexer ---
+  (function() {
+    const offlineList = document.getElementById('offline-links');
+    if (!offlineList) return;
+
+    if (!('caches' in window)) {
+      offlineList.innerHTML = '<li class="offline-error">Nettleseren din støtter ikke offline-caching.</li>';
+      return;
+    }
+
+    caches.open('bever-cache-v1').then(cache => {
+      cache.keys().then(requests => {
+        const articleRequests = requests.filter(req => {
+          const url = new URL(req.url);
+          // Only show garden notes and avoid directories
+          return url.pathname.startsWith('/garden/') && 
+                 url.pathname !== '/garden/' && 
+                 url.pathname !== '/garden';
+        });
+
+        if (articleRequests.length === 0) {
+          offlineList.innerHTML = '<li class="offline-empty">Du har ingen lagrede notater på denne enheten ennå. Gå online og utforsk noen notater først! 🍂</li>';
+          return;
+        }
+
+        offlineList.innerHTML = ''; // Clear loading status
+
+        articleRequests.forEach(req => {
+          const url = new URL(req.url);
+          
+          // Fetch from the cache to extract the real article title!
+          cache.match(req).then(response => {
+            if (!response) return;
+            response.text().then(htmlText => {
+              // Extract page title using a simple regex (fast and CSP-safe!)
+              const titleMatch = htmlText.match(/<title>([^<]+)<\/title>/i);
+              let title = titleMatch ? titleMatch[1] : url.pathname;
+              
+              // Strip site name suffix from title if present (e.g. "Title | Den Tamme Bever")
+              title = title.split(' | ')[0];
+
+              const li = document.createElement('li');
+              li.className = 'offline-link-item';
+              li.innerHTML = `
+                <a href="${url.pathname}" class="offline-article-link">
+                  <span class="offline-icon">📄</span>
+                  <span class="offline-title">${title.toLowerCase()}</span>
+                </a>
+              `;
+              offlineList.appendChild(li);
+            });
+          });
+        });
+      });
+    }).catch(err => {
+      offlineList.innerHTML = `<li class="offline-error">Kunne ikke hente lagrede sider: ${err.message}</li>`;
+    });
+  })();
+
+
+  // --- Glassmorphic Command Palette (CMD+K) Search ---
+  (function() {
+    const searchModal = document.getElementById('search-modal');
+    const searchInput = document.getElementById('search-modal-input');
+    const searchResults = document.getElementById('search-modal-results');
+    const searchToggle = document.getElementById('search-toggle');
+    
+    if (!searchModal || !searchInput || !searchResults) return;
+
+    let indexLoaded = false;
+    let elasticIndex = null;
+    let activeResultIdx = -1;
+
+    // Load scripts dynamically to preserve page load speed
+    function loadSearchEngine(callback) {
+      if (indexLoaded) {
+        if (callback) callback();
+        return;
+      }
+
+      // Show loading status
+      searchResults.innerHTML = '<li class="search-status-item">Laster inn søkemotoren...</li>';
+
+      // Load elasticlunr
+      const elScript = document.createElement('script');
+      elScript.src = '/elasticlunr.min.js';
+      elScript.onload = () => {
+        // Load search index (Zola generates search_index.no.js by default for language 'no')
+        const idxScript = document.createElement('script');
+        idxScript.src = '/search_index.no.js';
+        idxScript.onload = () => {
+          if (window.searchIndex) {
+            elasticIndex = elasticlunr.Index.load(window.searchIndex);
+            indexLoaded = true;
+            if (callback) callback();
+          } else {
+            searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Kunne ikke hente søkeindeksen.</li>';
+          }
+        };
+        idxScript.onerror = () => {
+          searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Kunne ikke laste søkeindeks-filen.</li>';
+        };
+        document.body.appendChild(idxScript);
+      };
+      elScript.onerror = () => {
+        searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Kunne ikke laste søkemotoren (elasticlunr).</li>';
+      };
+      document.body.appendChild(elScript);
+    }
+
+    function openSearch() {
+      searchModal.classList.add('open');
+      searchModal.setAttribute('aria-hidden', 'false');
+      loadSearchEngine(() => {
+        searchInput.focus();
+        performSearch(); // Perform search on empty query/previous query
+      });
+    }
+
+    function closeSearch() {
+      searchModal.classList.remove('open');
+      searchModal.setAttribute('aria-hidden', 'true');
+      searchInput.blur();
+    }
+
+    if (searchToggle) {
+      searchToggle.addEventListener('click', openSearch);
+    }
+
+    searchModal.addEventListener('click', (e) => {
+      if (e.target === searchModal) {
+        closeSearch();
+      }
+    });
+
+    // Keyboard trigger bindings (CMD+K, Ctrl+K, /, Esc)
+    document.addEventListener('keydown', (e) => {
+      // CMD+K or Ctrl+K
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (searchModal.classList.contains('open')) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+
+      // Slash key '/' (only when not typing in form inputs)
+      if (e.key === '/' && !searchModal.classList.contains('open') &&
+          document.activeElement.tagName !== 'INPUT' && 
+          document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        openSearch();
+      }
+
+      // Esc to close
+      if (e.key === 'Escape' && searchModal.classList.contains('open')) {
+        closeSearch();
+      }
+    });
+
+    // Arrow navigation inside results list
+    searchInput.addEventListener('keydown', (e) => {
+      const items = searchResults.querySelectorAll('.search-result-item');
+      if (items.length === 0) return;
+
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeResultIdx = (activeResultIdx + 1) % items.length;
+        updateActiveResult(items);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeResultIdx = (activeResultIdx - 1 + items.length) % items.length;
+        updateActiveResult(items);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (activeResultIdx >= 0 && activeResultIdx < items.length) {
+          const link = items[activeResultIdx].querySelector('a');
+          if (link) link.click();
+        }
+      }
+    });
+
+    function updateActiveResult(items) {
+      items.forEach((item, idx) => {
+        if (idx === activeResultIdx) {
+          item.classList.add('active');
+          item.scrollIntoView({ block: 'nearest' });
+        } else {
+          item.classList.remove('active');
+        }
+      });
+    }
+
+    searchInput.addEventListener('input', performSearch);
+
+    function performSearch() {
+      if (!indexLoaded || !elasticIndex) return;
+
+      const query = searchInput.value.trim().toLowerCase();
+      activeResultIdx = -1;
+
+      if (query === '') {
+        searchResults.innerHTML = '<li class="search-status-item">Skriv inn et søkeord for å dypdykke i hagen...</li>';
+        return;
+      }
+
+      const rawResults = elasticIndex.search(query, {
+        fields: {
+          title: { boost: 3 },
+          description: { boost: 2 },
+          body: { boost: 1 }
+        },
+        bool: "OR",
+        expand: true
+      });
+
+      if (rawResults.length === 0) {
+        searchResults.innerHTML = '<li class="search-status-item">Ingen treff matcher søket ditt...</li>';
+        return;
+      }
+
+      searchResults.innerHTML = ''; // Clear status
+
+      rawResults.forEach((res) => {
+        const doc = elasticIndex.documentStore.getDoc(res.ref);
+        if (!doc) return;
+
+        // Strip absolute url prefixes to support relative URLs perfectly
+        const relativeUrl = doc.id.replace(window.location.origin, "").replace("https://dentammebever.no", "");
+        
+        const li = document.createElement('li');
+        li.className = 'search-result-item';
+
+        // Extract category (Zola standard structure or falls back to garden/general)
+        let category = 'generelt';
+        if (relativeUrl.includes('/garden/')) {
+          category = 'hagenotat';
+        }
+
+        // Highlight matching terms in excerpt
+        let excerpt = doc.description || doc.body || '';
+        if (excerpt.length > 140) {
+          // Find search term position in body to center excerpt around it!
+          const queryIdx = excerpt.toLowerCase().indexOf(query);
+          if (queryIdx > 60) {
+            excerpt = '...' + excerpt.substring(queryIdx - 50, queryIdx + 90) + '...';
+          } else {
+            excerpt = excerpt.substring(0, 140) + '...';
+          }
+        }
+
+        // Safe highlight replace
+        const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+        const highlightRegex = new RegExp(`(${escapedQuery})`, 'gi');
+        const highlightedExcerpt = excerpt.replace(highlightRegex, '<mark>$1</mark>');
+        const highlightedTitle = doc.title.replace(highlightRegex, '<mark>$1</mark>');
+
+        li.innerHTML = `
+          <a href="${relativeUrl}" class="search-result-link">
+            <div class="search-result-header">
+              <span class="search-result-title">${highlightedTitle.toLowerCase()}</span>
+              <span class="search-result-category">#${category}</span>
+            </div>
+            <p class="search-result-excerpt">${highlightedExcerpt}</p>
+          </a>
+        `;
+
+        searchResults.appendChild(li);
+      });
+    }
+  })();
+
   if ('serviceWorker' in navigator) {
+
+
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js')
         .then(() => console.log('sw.js registrert.'))

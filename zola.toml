@@ -10,9 +10,11 @@ generate_feeds = true
 feed_filenames = ["rss.xml"]
 
 # Innebygd søkeindeks for fulltekstsøk (ElasticLunr)
-[search]
 build_search_index = true
+
+[search]
 index_format = "elasticlunr_javascript"
+
 
 
 [markdown.highlighting]
