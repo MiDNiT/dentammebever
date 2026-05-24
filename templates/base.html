@@ -189,8 +189,22 @@
     </div>
   </div>
 
-  {# --- Static deferred search & main scripts for maximum performance & compatibility --- #}
-  <script src="/search_index.no.js" defer></script>
+  {# --- Inline Search Index for instant search performance and robust cross-browser support --- #}
+  <script>
+    window.searchIndexDocs = [
+      {% set garden_section = get_section(path="garden/_index.md") %}
+      {% for note in garden_section.pages %}
+        {
+          "url": {{ note.path | json_encode | safe }},
+          "title": {{ note.title | json_encode | safe }},
+          "category": {{ note.extra.category | default(value="generelt") | json_encode | safe }},
+          "tags": {{ note.taxonomies.tags | default(value=[]) | json_encode | safe }},
+          "summary": {% if note.description %}{{ note.description | json_encode | safe }}{% elif note.summary %}{{ note.summary | striptags | json_encode | safe }}{% else %}{{ note.content | striptags | truncate(length=120) | json_encode | safe }}{% endif %},
+          "body": {{ note.content | striptags | json_encode | safe }}
+        }{% if not loop.last %},{% endif %}
+      {% endfor %}
+    ];
+  </script>
   <script src="/js/main.js" defer></script>
 
 </body>

@@ -505,24 +505,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize preloaded search index
     function loadSearchEngine(callback) {
-      if (indexLoaded) {
-        if (callback) callback();
-        return;
-      }
-
-      if (window.searchIndex) {
+      if (window.searchIndexDocs) {
         indexLoaded = true;
         if (callback) callback();
       } else {
-        // Fallback: If searchIndex is not parsed yet, wait 300ms and retry
-        setTimeout(() => {
-          if (window.searchIndex) {
-            indexLoaded = true;
-            if (callback) callback();
-          } else {
-            searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Søkeindeksen klargjøres fortsatt. Prøv igjen om et øyeblikk.</li>';
-          }
-        }, 300);
+        searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Søkeindeksen kunne ikke lastes.</li>';
       }
     }
 
@@ -611,7 +598,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Custom Vanilla JavaScript search scanner
     function performSearch() {
-      if (!indexLoaded || !window.searchIndex || !window.searchIndex.documentStore || !window.searchIndex.documentStore.docs) {
+      if (!indexLoaded || !window.searchIndexDocs) {
         return;
       }
 
@@ -623,34 +610,37 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      const docs = window.searchIndex.documentStore.docs;
+      const docs = window.searchIndexDocs;
       const results = [];
 
-      for (let url in docs) {
-        const doc = docs[url];
+      docs.forEach(doc => {
         const title = doc.title || '';
         const body = doc.body || '';
-        const desc = doc.description || '';
+        const desc = doc.summary || '';
+        const tags = doc.tags ? doc.tags.join(', ') : '';
 
         const titleMatch = title.toLowerCase().includes(query);
         const bodyMatch = body.toLowerCase().includes(query);
         const descMatch = desc.toLowerCase().includes(query);
+        const tagsMatch = tags.toLowerCase().includes(query);
 
-        if (titleMatch || bodyMatch || descMatch) {
+        if (titleMatch || bodyMatch || descMatch || tagsMatch) {
           let score = 0;
           if (titleMatch) score += 10;
+          if (tagsMatch) score += 7;
           if (descMatch) score += 5;
           if (bodyMatch) score += 1;
 
           results.push({
-            url: url,
+            url: doc.url,
             title: title,
             body: body,
             description: desc,
+            category: doc.category || 'generelt',
             score: score
           });
         }
-      }
+      });
 
       results.sort((a, b) => b.score - a.score);
 
@@ -667,10 +657,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const li = document.createElement('li');
         li.className = 'search-result-item';
 
-        let category = 'generelt';
-        if (relativeUrl.includes('/garden/')) {
-          category = 'hagenotat';
-        }
+        const category = res.category || 'hagenotat';
 
         let excerpt = res.description || res.body || '';
         if (excerpt.length > 140) {
@@ -691,7 +678,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <a href="${relativeUrl}" class="search-result-link">
             <div class="search-result-header">
               <span class="search-result-title">${highlightedTitle.toLowerCase()}</span>
-              <span class="search-result-category">#${category}</span>
+              <span class="search-result-category">#${category.toLowerCase()}</span>
             </div>
             <p class="search-result-excerpt">${highlightedExcerpt}</p>
           </a>
@@ -708,32 +695,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!articleContainer) return;
 
     function initRecommendations() {
-      if (!window.searchIndex || !window.searchIndex.documentStore || !window.searchIndex.documentStore.docs) {
-        // Retry in 300ms if searchIndex is not ready yet
+      if (!window.searchIndexDocs) {
+        // Retry in 300ms if searchIndexDocs is not ready yet
         setTimeout(initRecommendations, 300);
         return;
       }
 
-      const docs = window.searchIndex.documentStore.docs;
+      const docs = window.searchIndexDocs;
       const currentPath = window.location.pathname;
       const candidates = [];
 
-      for (let url in docs) {
-        const doc = docs[url];
-        const relativeUrl = url.replace(window.location.origin, "").replace("https://dentammebever.no", "");
+      docs.forEach(doc => {
+        const relativeUrl = doc.url.replace(window.location.origin, "").replace("https://dentammebever.no", "");
         
         // Exclude current page and non-garden files (like privacy page or index)
         if (relativeUrl === currentPath || !relativeUrl.includes('/garden/') || relativeUrl.endsWith('_index.md') || relativeUrl === '/garden/') {
-          continue;
+          return;
         }
 
         candidates.push({
           url: relativeUrl,
           title: doc.title,
-          description: doc.description || doc.body.substring(0, 100) + '...',
+          description: doc.summary || doc.body.substring(0, 100) + '...',
           body: doc.body
         });
-      }
+      });
 
       if (candidates.length === 0) return;
 

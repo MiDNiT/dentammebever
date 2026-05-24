@@ -211,7 +211,57 @@
   </div>
 
   
-  <script src="/search_index.no.js" defer></script>
+  <script>
+    window.searchIndexDocs = [
+      
+      
+        {
+          "url": "/garden/digital-gardening/",
+          "title": "Notatboken som et levende økosystem",
+          "category": "sosiologi",
+          "tags": [],
+          "summary": "Hvorfor det å bygge et personlig nettverk av notater ligner på beverens utrettelige arbeid med å forme sitt eget økosystem.",
+          "body": "En bever bygger ikke bare en demning for å bo i. Ved å demme opp vannet, felle trær og grave kanaler, endrer beveren hele landskapet rundt seg. Den skaper et levende økosystem av våtmarker, dammer og kanaler der utallige andre arter kan leve og trives.\nDette nettstedet er bygget etter akkurat det samme prinsippet. Det er ikke en tradisjonell blogg der gamle innlegg gjemmes bort kronologisk. I stedet bygger jeg et personlig kunnskaps-økosystem – bit for bit.\n\nBeverens arbeidsmetode i praksis\nNår jeg lærer noe nytt eller utforsker en idé, feller jeg en ny stamme og legger den til i demningen:\n\nFange opp råmateriale: Hver tanke starter som en enkel stamme. Jeg lagrer tankene mine i Markdown-filer.\nKoble sammen kanalene: I stedet for isolerte notater, oppretter jeg toveis-koblinger (backlinks). Disse fungerer som beverens kanaler – de gjør det enkelt å flyte fra et tema til et annet, oppdage uventede sammenhenger, og la ideene befrukte hverandre. For eksempel kan du utforske min Obsidian-arbeidsflyt for å se verktøyene jeg bruker til å forme notatene mine, eller lese om hvorfor jeg har valgt Zola for maksimal hastighet.\nSkape et varig økosystem: Ved å koble sammen notater om litteratur og stoisisme eller en minimalistisk investeringsfilosofi, oppstår det en synergieffekt der summen av kunnskapen blir større enn de enkelte delene.\n\n\n\"A bever builds a dam, and in doing so, changes the entire valley. A thinker builds a network of ideas, and in doing so, changes their entire perspective.\"\n\nDette nettstedet er mitt personlige økosystem. Klikk deg gjerne rundt og se hvordan de ulike delene henger sammen!\n"
+        },
+      
+        {
+          "url": "/garden/obsidian-workflow/",
+          "title": "Min Obsidian-arbeidsflyt",
+          "category": "teknologi",
+          "tags": [],
+          "summary": "En titt inn i hvordan jeg bruker Obsidian til å bygge mitt personlige kunnskaps-økosystem.",
+          "body": "Obsidian har blitt mitt absolutte favorittverktøy for det man kaller Personal Knowledge Management (PKM). Siden Obsidian lagrer alt som lokale Markdown-filer, passer det helt perfekt sammen med statiske nettsidegeneratorer.\nDette nettstedet er et direkte resultat av denne strukturerte bever-arbeidsflyten!\n\nFra tanke til økosystem\nArbeidsflyten min er delt inn i tre enkle steg:\n\nFange opp (Inbox): Jeg oppretter raskt et nytt notat i Obsidian når jeg lærer noe nytt eller får en idé. Dette er min råvare – en trestamme som skal bearbeides.\nKoble sammen kanalene: Jeg går gjennom notatene ukentlig og oppretter toveis-koblinger. Koblinger hjelper meg å huske sammenhenger. For eksempel, når jeg skriver om ytelse, kobler jeg det direkte til Zola static site generator.\nBygge demningen (Export): Med et enkelt skript (eller Git-push) kopierer jeg de notatene jeg ønsker å dele offentlig over i content/garden/-mappen til Zola-prosjektet mitt.\n\n\nHvorfor lokale Markdown-filer er overlegne\n\nFremtidssikret: Markdown er ren tekst. Selv om Obsidian skulle forsvinne om ti år, kan jeg fortsatt lese alle notatene mine.\nPortabilitet: Jeg kan bruke de samme filene i Zola, Hugo, eller bare søke i dem med standard terminalverktøy.\nVersjonskontroll: Git gjør det superenkelt å spore endringer over tid.\n\nHvis du vil lære mer om teorien bak hvorfor jeg foretrekker denne metoden fremfor en tradisjonell blogg, kan du lese notatet mitt om hvordan notatboken fungerer som et levende økosystem.\n"
+        },
+      
+        {
+          "url": "/garden/zola-speed/",
+          "title": "Hvorfor Zola er så ekstremt kjapp",
+          "category": "prosjekter",
+          "tags": [],
+          "summary": "En teknisk titt på hvorfor Zola utkonkurrerer andre generatorer, og hvorfor det er det perfekte valget for et digitalt økosystem.",
+          "body": "Når målet er å lage en nettside som laster umiddelbart, er Zola et av de absolutt beste verktøyene som finnes. Men hvorfor er det så raskt?\n\n1. Skrevet i Rust\nZola er bygget fra bunnen av i programmeringsspråket Rust. Rust er kjent for sin ekstreme ytelse, trådsikkerhet og minimale minnebruk. Zola kompilerer hundrevis av sider på bare noen få millisekunder.\n2. Én enkelt binærfil (Zero Dependencies)\nMange andre verktøy (som Gatsby, Next.js eller Jekyll) krever at du installerer hundrevis av megabytes med node_modules eller Ruby gems. Zola krever ingenting av dette. Det er en enkelt, ferdigkompilert fil som bare kjører.\nDette betyr:\n\nNull sårbarheter i tredjepartsavhengigheter.\nLynrask oppstart (ingen lastetid for node-kjøretid).\nUtrolig enkel distribusjon (du bare kjører en kommando).\n\n\nIntegrasjon med Kunnskapsnettverk\nFor et personlig kunnskaps-økosystem er ytelse helt essensielt. Siden vi ønsker å koble sammen hundrevis av notater ved hjelp av en Obsidian-arbeidsflyt, trenger vi en generator som klarer å bygge relasjoner (som toveis-koblinger/backlinks) lynraskt uten at byggetiden øker eksponensielt.\nZola løser dette ved å holde hele kunnskapsgrafen i minnet under bygging, noe som gjør at lenkesjekking og backlink-generering skjer parallelt og umiddelbart.\n# Sjekk byggetiden selv!\n./bin/zola build\nResultatet er en nettside som oppnår 100/100 på Google Lighthouse ut av boksen.\n"
+        },
+      
+        {
+          "url": "/garden/litteratur-notat/",
+          "title": "Meditasjoner av Marcus Aurelius",
+          "category": "litteratur",
+          "tags": [],
+          "summary": "Mine personlige refleksjoner og stoiske prinsipper hentet fra den romerske keiserens private notatbok.",
+          "body": "Meditasjoner av Marcus Aurelius er ikke en bok skrevet for offentligheten. Det var den romerske keiserens private dagbok, skrevet til seg selv under militære felttog, som en kilde til selvdisiplin og mental styrke.\nPrinsippene i boken utgjør kjernen i stoisismen, en filosofisk retning som er ekstremt relevant den dag i dag.\n\nSentrale stoiske ideer\n\nDikotomien om kontroll: Det finnes ting vi kan kontrollere (våre egne tanker, handlinger, reaksjoner), og ting vi ikke kan kontrollere (andres oppførsel, naturkatastrofer, fortiden, fremtiden). Lidelse oppstår når vi prøver å kontrollere det ytre.\nKarakter over alt annet: Det eneste ekte godet er å handle rettferdig, modig, disiplinert og klokt. Ytre suksess, rikdom eller berømmelse er nøytrale – de er fine å ha, men definerer ikke din verdi.\nMemento Mori: Husk at du skal dø. Dette er ikke tenkt som en deprimerende tanke, men som en påminnelse om å sette pris på nuet og fokusere på det som er viktig.\n\n\nKobling til moderne kunnskap\nDet fascinerende med denne boken er at den er bygget opp akkurat som mitt personlige kunnskaps-økosystem. Marcus Aurelius skrev ikke i lange kapitler, men i korte, frittstående avsnitt og aforismer som refererer til hverandre.\nDet var hans personlige, stoiske kunnskapsbase – hans eget rom for refleksjon og mental robusthet.\n"
+        },
+      
+        {
+          "url": "/garden/investerings-filosofi/",
+          "title": "En minimalistisk investeringsfilosofi",
+          "category": "investering",
+          "tags": [],
+          "summary": "Hvorfor tid i markedet slår å time markedet, og hvorfor enkelhet er nøkkelen til langsiktig avkastning.",
+          "body": "Finansverdenen er støyende. Hver dag er det nye analyser, aksjetips, spådommer om markedsfall, og råd om \"den neste store tingen\".\nMin investeringsfilosofi er, i likhet med resten av dette notat-økosystemet, basert på prinsippet om minimalisme og enkelhet.\n\nDe tre stødige søylene\n\nPassive indeksfond: I stedet for å prøve å velge enkeltaksjer (som over 90% av profesjonelle forvaltere mislykkes med å gjøre bedre enn markedet over tid), kjøper jeg hele markedet billig gjennom globale indeksfond.\nTid i markedet slår å time markedet: Det er umulig å forutsi når bunnen eller toppen er nådd. Den mest pålitelige måten å bygge formue på er å investere et fast beløp hver måned, uansett om markedet går opp eller ned (Dollar Cost Averaging).\nMinimere kostnader: Gebyrer spiser avkastning. Ved å velge lavkostnadsfond sikrer jeg at mest mulig av rentes-rente-effekten går direkte til meg.\n\n\nKobling til mental balanse\nDenne investeringsmetoden krever minimalt med tid og oppmerksomhet. Akkurat som en god stoisk filosofi lærer oss å ignorere ytre støy og fokusere på det vi kan kontrollere, lærer denne investeringsmodellen oss å ignorere daglige svingninger og ha tro på den langsiktige globale veksten.\nDet enkle er ofte det beste – både i kode, design, finans og beverbygging.\n"
+        }
+      
+    ];
+  </script>
   <script src="/js/main.js" defer></script>
 
 </body>
