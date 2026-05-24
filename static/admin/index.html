@@ -112,6 +112,7 @@
           <span id="current-note-status-badge" class="badge badge-new">Nytt notat</span>
         </div>
         <div class="editor-actions">
+          <button id="help-drawer-btn" class="btn-icon-help glass-dark" title="Markdown-hjelp" aria-label="Markdown-hjelp">?</button>
           <div class="view-toggle glass-dark">
             <button id="write-tab-btn" class="toggle-btn active">Skriv</button>
             <button id="preview-tab-btn" class="toggle-btn">Forhåndsvis</button>
@@ -188,6 +189,111 @@
       </div>
     </section>
   </main>
+
+  <!-- ==================== MARKDOWN HELP DRAWER ==================== -->
+  <div id="help-drawer" class="help-drawer glass-dark">
+    <div class="help-drawer-header">
+      <h3>Markdown-hjelp</h3>
+      <button id="help-drawer-close" class="btn-close" aria-label="Lukk">&times;</button>
+    </div>
+    <div class="help-drawer-body">
+      <p class="help-intro">Klikk på en mal under for å sette den direkte inn i tekstfeltet der markøren din står:</p>
+      
+      <div class="help-section">
+        <h4>Tekstformatering</h4>
+        <div class="help-grid">
+          <button class="help-item" data-template="**fet tekst**" data-offset="2" data-length="9">
+            <span class="help-item-label">Fet skrift</span>
+            <code>**fet**</code>
+          </button>
+          <button class="help-item" data-template="*kursiv tekst*" data-offset="1" data-length="12">
+            <span class="help-item-label">Kursiv</span>
+            <code>*kursiv*</code>
+          </button>
+          <button class="help-item" data-template="~~gjennomstreket~~" data-offset="2" data-length="14">
+            <span class="help-item-label">Strikethrough</span>
+            <code>~~slett~~</code>
+          </button>
+          <button class="help-item" data-template="`kode`" data-offset="1" data-length="4">
+            <span class="help-item-label">Inline-kode</span>
+            <code>`kode`</code>
+          </button>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h4>Overskrifter</h4>
+        <div class="help-grid">
+          <button class="help-item" data-template="# Overskrift 1" data-offset="2" data-length="12">
+            <span class="help-item-label">H1</span>
+            <code># Tittel</code>
+          </button>
+          <button class="help-item" data-template="## Overskrift 2" data-offset="3" data-length="12">
+            <span class="help-item-label">H2</span>
+            <code>## Seksjon</code>
+          </button>
+          <button class="help-item" data-template="### Overskrift 3" data-offset="4" data-length="12">
+            <span class="help-item-label">H3</span>
+            <code>### Underpunkt</code>
+          </button>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h4>Lister og punkter</h4>
+        <div class="help-grid-vertical">
+          <button class="help-item help-item-left" data-template="- Element 1\n- Element 2" data-offset="2" data-length="9">
+            <span class="help-item-label">Punktliste</span>
+            <code>- element</code>
+          </button>
+          <button class="help-item help-item-left" data-template="1. Første\n2. Andre" data-offset="3" data-length="6">
+            <span class="help-item-label">Nummerert liste</span>
+            <code>1. element</code>
+          </button>
+          <button class="help-item help-item-left" data-template="- [ ] Gjør dette\n- [ ] Gjør det" data-offset="6" data-length="9">
+            <span class="help-item-label">Sjekkliste (Obsidian-stil)</span>
+            <code>- [ ] gjøremål</code>
+          </button>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h4>Lenker og media</h4>
+        <div class="help-grid-vertical">
+          <button class="help-item help-item-left" data-template="[Lenketekst](https://)" data-offset="1" data-length="10">
+            <span class="help-item-label">Lenke</span>
+            <code>[tekst](url)</code>
+          </button>
+          <button class="help-item help-item-left" data-template="![Bildetekst](https://)" data-offset="2" data-length="10">
+            <span class="help-item-label">Bilde</span>
+            <code>![alt](url)</code>
+          </button>
+          <button class="help-item help-item-left" data-template="> Sitat" data-offset="2" data-length="5">
+            <span class="help-item-label">Blokksitat</span>
+            <code>> sitat</code>
+          </button>
+        </div>
+      </div>
+
+      <div class="help-section">
+        <h4>Avanserte maler</h4>
+        <div class="help-grid-vertical">
+          <button class="help-item help-item-left" data-template="```javascript\nconsole.log('bever');\n```" data-offset="12" data-length="22">
+            <span class="help-item-label">Kodeblokk</span>
+            <code>```js ... ```</code>
+          </button>
+          <button class="help-item help-item-left" data-template="| Kolonne 1 | Kolonne 2 |\n| --------- | --------- |\n| Celle A   | Celle B   |" data-offset="2" data-length="9">
+            <span class="help-item-label">Tabellmal</span>
+            <code>| tabell |</code>
+          </button>
+          <button class="help-item help-item-left" data-template="---" data-offset="3" data-length="0">
+            <span class="help-item-label">Horisontal linje</span>
+            <code>---</code>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="/admin/admin.js"></script>
 </body>

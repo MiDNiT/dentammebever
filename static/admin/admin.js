@@ -66,6 +66,10 @@ const previewMetaDate = document.getElementById('preview-meta-date');
 const previewTagsContainer = document.getElementById('preview-tags-container');
 const previewContent = document.getElementById('preview-content');
 
+const helpDrawer = document.getElementById('help-drawer');
+const helpDrawerBtn = document.getElementById('help-drawer-btn');
+const helpDrawerClose = document.getElementById('help-drawer-close');
+
 /* ==========================================================================
    INITIALIZATION & AUTHENTICATION
    ========================================================================== */
@@ -668,6 +672,83 @@ function showToast(msg, isError) {
   setTimeout(() => {
     notification.classList.remove('show');
   }, 4000);
+}
+
+/* ==========================================================================
+   MARKDOWN HELP DRAWER LOGIC
+   ========================================================================== */
+
+// --- Help Drawer Toggle ---
+if (helpDrawer && helpDrawerBtn && helpDrawerClose) {
+  helpDrawerBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    helpDrawer.classList.toggle('open');
+  });
+
+  helpDrawerClose.addEventListener('click', (e) => {
+    e.stopPropagation();
+    helpDrawer.classList.remove('open');
+  });
+
+  // Close when clicking outside
+  document.addEventListener('click', (e) => {
+    if (helpDrawer.classList.contains('open') && 
+        !helpDrawer.contains(e.target) && 
+        e.target !== helpDrawerBtn &&
+        !e.target.closest('#help-drawer-btn')) {
+      helpDrawer.classList.remove('open');
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && helpDrawer.classList.contains('open')) {
+      helpDrawer.classList.remove('open');
+    }
+  });
+}
+
+// --- Markdown Insert at Cursor Logic ---
+const helpItems = document.querySelectorAll('.help-item');
+if (helpItems.length > 0) {
+  helpItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation(); // Avoid closing drawer from document click
+      
+      const rawTemplate = item.getAttribute('data-template');
+      // Replace literal \n with real newline characters
+      const template = rawTemplate.replace(/\\n/g, '\n');
+      const offset = parseInt(item.getAttribute('data-offset') || '0', 10);
+      const length = parseInt(item.getAttribute('data-length') || '0', 10);
+
+      insertMarkdownAtCursor(template, offset, length);
+    });
+  });
+}
+
+function insertMarkdownAtCursor(template, offset, length) {
+  if (!markdownBody) return;
+
+  const startPos = markdownBody.selectionStart;
+  const endPos = markdownBody.selectionEnd;
+  const textVal = markdownBody.value;
+
+  // Split text and inject template
+  markdownBody.value = textVal.substring(0, startPos) + template + textVal.substring(endPos);
+
+  // Refocus and place selection
+  markdownBody.focus();
+  
+  // Calculate new selection coordinates
+  const newSelectStart = startPos + offset;
+  const newSelectEnd = newSelectStart + length;
+  
+  markdownBody.setSelectionRange(newSelectStart, newSelectEnd);
+  
+  // Trigger preview render if preview mode is active
+  if (previewPane.classList.contains('active')) {
+    renderLivePreview();
+  }
 }
 
 /* ==========================================================================
