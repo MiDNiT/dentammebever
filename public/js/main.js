@@ -747,6 +747,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize recommendation list on load
     window.addEventListener('load', initRecommendations);
+  })();
 
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
