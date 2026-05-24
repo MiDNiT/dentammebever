@@ -388,15 +388,65 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Service Worker Registration for offline support ---
-  // --- Newsletter Ajax handling (inline thank‑you) ---
+  // --- Newsletter Ajax & Real-time Validation (Buttondown integration) ---
   (function() {
     const newsletterForm = document.querySelector('.newsletter-form');
     if (!newsletterForm) return;
 
-    newsletterForm.addEventListener('submit', function (e) {
+    const emailInput = document.getElementById('newsletter-email');
+    const submitBtn = document.getElementById('newsletter-submit-btn');
+    const validationBadge = document.getElementById('newsletter-validation-badge');
+    const statusMsg = document.getElementById('newsletter-status-message');
+
+    if (!emailInput || !submitBtn || !validationBadge || !statusMsg) return;
+
+    // Email verification regex pattern
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Sanntidsvalidering av e-post
+    emailInput.addEventListener('input', function() {
+      const val = emailInput.value.trim();
+
+      if (val === '') {
+        // Clear states
+        emailInput.classList.remove('is-valid', 'is-invalid');
+        validationBadge.className = 'newsletter-validation-badge';
+        validationBadge.innerHTML = '';
+        submitBtn.setAttribute('disabled', 'true');
+        return;
+      }
+
+      if (emailRegex.test(val)) {
+        // Valid State
+        emailInput.classList.add('is-valid');
+        emailInput.classList.remove('is-invalid');
+        validationBadge.className = 'newsletter-validation-badge show-valid';
+        validationBadge.innerHTML = '✓';
+        submitBtn.removeAttribute('disabled');
+      } else {
+        // Invalid State
+        emailInput.classList.add('is-invalid');
+        emailInput.classList.remove('is-valid');
+        validationBadge.className = 'newsletter-validation-badge show-invalid';
+        validationBadge.innerHTML = '✗';
+        submitBtn.setAttribute('disabled', 'true');
+      }
+    });
+
+    // Form Submission Interceptor (AJAX iframe proxy)
+    newsletterForm.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      const iframeName = 'mailchimp-iframe-' + Date.now();
+      // Ensure form is actually valid
+      if (!emailRegex.test(emailInput.value.trim())) return;
+
+      // Enter Loading State
+      submitBtn.classList.add('is-loading');
+      submitBtn.setAttribute('disabled', 'true');
+      emailInput.setAttribute('disabled', 'true');
+
+      // Create a background target iframe to handle the submission (bypass CORS!)
+      const iframeName = 'buttondown-iframe-' + Date.now();
       const iframe = document.createElement('iframe');
       iframe.name = iframeName;
       iframe.style.display = 'none';
@@ -407,26 +457,53 @@ document.addEventListener('DOMContentLoaded', () => {
       newsletterForm.submit();
       newsletterForm.setAttribute('target', originalTarget || '_blank');
 
-      iframe.addEventListener('load', function () {
-        // Remove any existing thank‑you message
-        const existing = newsletterForm.parentNode.querySelector('.newsletter-msg');
-        if (existing) existing.remove();
+      // Setup a safety timeout in case loading takes too long
+      const safetyTimeout = setTimeout(() => {
+        handleResponse(false, 'Oppkoblingen tok for lang tid. Vennligst prøv igjen.');
+      }, 8000);
 
-        // Create fresh element to re‑trigger CSS animation
-        const thankMsg = document.createElement('p');
-        thankMsg.className = 'newsletter-msg';
-        thankMsg.textContent = 'Takk for påmeldingen — du hører fra oss snart.';
-        newsletterForm.parentNode.insertBefore(thankMsg, newsletterForm.nextSibling);
+      function handleResponse(success, msg) {
+        clearTimeout(safetyTimeout);
 
-        newsletterForm.reset();
+        // Reset spinner and input disabled state
+        submitBtn.classList.remove('is-loading');
+        emailInput.removeAttribute('disabled');
 
+        // Display status card with premium fade-in
+        statusMsg.className = `newsletter-status-message show ${success ? 'success' : 'error'}`;
+        statusMsg.textContent = msg;
+
+        if (success) {
+          newsletterForm.reset();
+          emailInput.classList.remove('is-valid', 'is-invalid');
+          validationBadge.className = 'newsletter-validation-badge';
+          validationBadge.innerHTML = '';
+          submitBtn.setAttribute('disabled', 'true');
+        } else {
+          submitBtn.removeAttribute('disabled');
+        }
+
+        // Smooth fade-out after 6 seconds
         setTimeout(() => {
-          thankMsg.style.transition = 'opacity 0.4s ease';
-          thankMsg.style.opacity = '0';
-          setTimeout(() => thankMsg.remove(), 400);
-        }, 4000);
+          statusMsg.classList.remove('show');
+          setTimeout(() => {
+            statusMsg.className = 'newsletter-status-message';
+            statusMsg.textContent = '';
+          }, 400);
+        }, 6000);
 
-        iframe.remove();
+        // Cleanup iframe
+        try {
+          iframe.remove();
+        } catch (err) {}
+      }
+
+      iframe.addEventListener('load', function() {
+        // Since cross-origin frames prevent reading contents, we assume a successful load event means
+        // Buttondown received the submission and displayed its subscription redirect!
+        setTimeout(() => {
+          handleResponse(true, 'Takk for påmeldingen! Du vil motta en e-post for å bekrefte abonnementet ditt om kort tid.');
+        }, 400);
       });
     });
   })();

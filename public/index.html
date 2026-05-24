@@ -310,29 +310,44 @@
 </div>
 
 <section class="newsletter-section">
-  <h2 class="newsletter-title">abonner på nye notater<span class="logo-dot">.</span></h2>
-  <p class="newsletter-subtitle">Motta de nyeste artiklene og prosjektene direkte i innboksen din. Enkel avmelding, ingen spam.</p>
-  
-  <!-- 
-    KOBLE TIL MAILCHIMP:
-    1. Erstatt 'action'-attributten nedenfor med din egen Mailchimp POST URL.
-       F.eks.: https://dentammebever.us10.list-manage.com/subscribe/post?u=abcdef123&amp;id=456789
-    2. Oppdater 'name'-attributten på honeypot-feltet under for best mulig spam-beskyttelse:
-       Erstatt 'b_din_u_id_din_list_id' med 'b_' etterfulgt av din u-verdi og id-verdi (f.eks. b_abcdef123_456789).
-  -->
-  <form class="newsletter-form"
-        action="https://dentammebever.us10.list-manage.com/subscribe/post?u=3645dc87336497ae12b0a4463&amp;id=6b07e43093&amp;f_id=000a4be4f0"
-        method="post"
-        target="_blank"
-        novalidate>
-
-    <input type="email" class="newsletter-input" name="EMAIL" placeholder="din e-postadresse..." aria-label="E-postadresse" required>
-    <!-- Anti-bot honeypot (skjult for vanlige brukere) -->
-    <div style="position: absolute; left: -5000px;" aria-hidden="true">
-      <input type="text" name="b_3645dc87336497ae12b0a4463_6b07e43093" tabindex="-1" value="">
+  <div class="newsletter-card glass-premium">
+    <div class="newsletter-content">
+      <div class="newsletter-icon-wrapper">
+        <svg class="newsletter-mail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+          <polyline points="22,6 12,13 2,6"></polyline>
+        </svg>
+      </div>
+      <div class="newsletter-text">
+        <h2 class="newsletter-title">abonner på nye notater<span class="logo-dot">.</span></h2>
+        <p class="newsletter-subtitle">Motta de nyeste artiklene og prosjektene direkte i innboksen din. Helt gratis, ingen spam, enkel avmelding.</p>
+      </div>
     </div>
-    <button type="submit" class="newsletter-btn">meld på</button>
-  </form>
+    
+    <form class="newsletter-form"
+          action="https://buttondown.com/api/emails/embed-subscribe/dentammebever"
+          method="post"
+          target="_blank"
+          novalidate>
+
+      <div class="newsletter-input-wrapper">
+        <input type="email" class="newsletter-input" name="email" id="newsletter-email" placeholder="din e-postadresse..." aria-label="E-postadresse" required>
+        <span class="newsletter-validation-badge" id="newsletter-validation-badge"></span>
+      </div>
+      
+      <!-- Anti-bot honeypot for Buttondown -->
+      <div style="position: absolute; left: -5000px;" aria-hidden="true">
+        <input type="text" name="b_din_u_id_din_list_id" tabindex="-1" value="">
+      </div>
+      
+      <button type="submit" class="newsletter-btn" id="newsletter-submit-btn" disabled>
+        <span class="btn-text">meld på</span>
+        <span class="btn-spinner" id="newsletter-btn-spinner"></span>
+      </button>
+    </form>
+    
+    <div class="newsletter-status-message" id="newsletter-status-message"></div>
+  </div>
 </section>
 
   </main>
