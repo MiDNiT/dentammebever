@@ -504,41 +504,29 @@ document.addEventListener('DOMContentLoaded', () => {
     let elasticIndex = null;
     let activeResultIdx = -1;
 
-    // Load scripts dynamically to preserve page load speed
+    // Initialize preloaded search engine from static script tags
     function loadSearchEngine(callback) {
       if (indexLoaded) {
         if (callback) callback();
         return;
       }
 
-      // Show loading status
-      searchResults.innerHTML = '<li class="search-status-item">Laster inn søkemotoren...</li>';
-
-      // Load elasticlunr
-      const elScript = document.createElement('script');
-      elScript.src = '/elasticlunr.min.js';
-      elScript.onload = () => {
-        // Load search index (Zola generates search_index.no.js by default for language 'no')
-        const idxScript = document.createElement('script');
-        idxScript.src = '/search_index.no.js';
-        idxScript.onload = () => {
-          if (window.searchIndex) {
+      if (window.elasticlunr && window.searchIndex) {
+        elasticIndex = elasticlunr.Index.load(window.searchIndex);
+        indexLoaded = true;
+        if (callback) callback();
+      } else {
+        // Fallback: If not fully parsed yet, wait 300ms and retry once
+        setTimeout(() => {
+          if (window.elasticlunr && window.searchIndex) {
             elasticIndex = elasticlunr.Index.load(window.searchIndex);
             indexLoaded = true;
             if (callback) callback();
           } else {
-            searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Kunne ikke hente søkeindeksen.</li>';
+            searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Søkeindeksen klargjøres fortsatt. Vennligst vent et øyeblikk og prøv igjen.</li>';
           }
-        };
-        idxScript.onerror = () => {
-          searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Kunne ikke laste søkeindeks-filen.</li>';
-        };
-        document.body.appendChild(idxScript);
-      };
-      elScript.onerror = () => {
-        searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Kunne ikke laste søkemotoren (elasticlunr).</li>';
-      };
-      document.body.appendChild(elScript);
+        }, 300);
+      }
     }
 
     function openSearch() {
