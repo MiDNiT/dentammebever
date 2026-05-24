@@ -11,11 +11,13 @@ const PRE_CACHE_ASSETS = [
   '/js/main.js',
   '/404.html',
   '/offline/',
-  '/offline/index.html'
+  '/offline/index.html',
+  '/elasticlunr.min.js',
+  '/search_index.no.js'
 ];
 
 
-// Install event - Pre-cache core layouts
+// Install event - Pre-cache core layouts and search indexes
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
@@ -66,12 +68,12 @@ self.addEventListener('fetch', e => {
           if (cachedResponse) {
             return cachedResponse;
           }
-          // If offline and request is HTML, we can return the cached offline guide page
-          if (e.request.headers.get('accept').includes('text/html')) {
+          // If offline and request is HTML, return the cached offline guide page
+          const acceptHeader = e.request.headers.get('accept');
+          if (acceptHeader && acceptHeader.includes('text/html')) {
             return caches.match('/offline/');
           }
         });
       })
   );
 });
-

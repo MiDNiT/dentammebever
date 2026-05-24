@@ -92,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (filterLinks.length > 0) {
     filterLinks.forEach(link => {
       link.addEventListener('click', (e) => {
-        // If we are on the home page (searchInput exists), intercept the click
-        if (searchInput) {
+        // If we are on a page containing the garden grid, intercept the click
+        if (document.getElementById('garden-grid')) {
           e.preventDefault();
           
           // Remove active class from all header links and add to clicked one
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
   // On Page Load: Check if there is a URL filter parameter (e.g. ?filter=litteratur)
-  if (searchInput) {
+  if (document.getElementById('garden-grid')) {
     const urlParams = new URLSearchParams(window.location.search);
     const filterParam = urlParams.get('filter');
     
