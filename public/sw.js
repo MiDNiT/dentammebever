@@ -4,7 +4,7 @@
    Ensures fresh content while allowing 100% offline reading support.
    ========================================================================== */
 
-const CACHE_NAME = 'bever-cache-v1';
+const CACHE_NAME = 'bever-cache-v2';
 const PRE_CACHE_ASSETS = [
   '/',
   '/css/style.css',
