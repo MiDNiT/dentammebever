@@ -1023,6 +1023,24 @@ a:hover {
   color: var(--bg-primary);
   font-weight: 700;
   font-size: 0.8rem;
+.newsletter-footer {
+  margin-top: -0.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.newsletter-referral {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-family: var(--font-sans);
+  transition: color var(--transition-fast);
+  text-transform: lowercase;
+  opacity: 0.75;
+}
+
+.newsletter-referral:hover {
+  color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {

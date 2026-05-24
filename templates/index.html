@@ -103,6 +103,12 @@
     </form>
     
     <div class="newsletter-status-message" id="newsletter-status-message"></div>
+    
+    <div class="newsletter-footer">
+      <a href="https://buttondown.com/refer/{{ config.extra.buttondown_username | default(value='dentammebeveren') }}" target="_blank" rel="noopener" class="newsletter-referral">
+        leveres av buttondown<span class="logo-dot">.</span>
+      </a>
+    </div>
   </div>
 </section>
 {% endblock content %}
