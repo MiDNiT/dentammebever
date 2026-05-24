@@ -500,26 +500,13 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (!searchModal || !searchInput || !searchResults) return;
 
-    let indexLoaded = false;
     let activeResultIdx = -1;
-
-    // Initialize preloaded search index
-    function loadSearchEngine(callback) {
-      if (window.searchIndexDocs) {
-        indexLoaded = true;
-        if (callback) callback();
-      } else {
-        searchResults.innerHTML = '<li class="search-status-item offline-error">Feil: Søkeindeksen kunne ikke lastes.</li>';
-      }
-    }
 
     function openSearch() {
       searchModal.classList.add('open');
       searchModal.setAttribute('aria-hidden', 'false');
-      loadSearchEngine(() => {
-        searchInput.focus();
-        performSearch();
-      });
+      searchInput.focus();
+      performSearch();
     }
 
     function closeSearch() {
@@ -598,15 +585,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Custom Vanilla JavaScript search scanner
     function performSearch() {
-      if (!indexLoaded || !window.searchIndexDocs) {
-        return;
-      }
-
       const query = searchInput.value.trim().toLowerCase();
       activeResultIdx = -1;
 
       if (query === '') {
         searchResults.innerHTML = '<li class="search-status-item">Skriv inn et søkeord for å dypdykke i hagen...</li>';
+        return;
+      }
+
+      if (!window.searchIndexDocs) {
+        searchResults.innerHTML = '<li class="search-status-item offline-error">Søkeindeksen er ikke klar. Prøv igjen.</li>';
         return;
       }
 
